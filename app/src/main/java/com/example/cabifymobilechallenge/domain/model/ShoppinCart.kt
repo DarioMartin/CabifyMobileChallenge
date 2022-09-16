@@ -1,6 +1,9 @@
 package com.example.cabifymobilechallenge.domain.model
 
-class ShoppingCart(private val products: List<Product>, private val discounts: List<Discount>) {
+data class ShoppingCart(
+    val products: List<Product> = emptyList(),
+    val discounts: List<Discount> = emptyList()
+) {
 
     fun total(): Double {
         val totalDiscount = discounts.sumOf { it.discount(products) }

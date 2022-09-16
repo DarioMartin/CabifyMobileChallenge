@@ -165,7 +165,7 @@ fun ProductListItem(product: Product, viewModel: ProductListViewModel = hiltView
 
 @Preview
 @Composable
-fun CharacterListItemPrev() {
+fun ProductListItemPrev() {
     CabifyMobileChallengeTheme {
         ProductListItem(
             Product.Voucher(
