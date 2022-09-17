@@ -2,12 +2,12 @@ package com.example.cabifymobilechallenge.domain.model
 
 sealed class Discount {
 
-    open fun discount(products: List<Product>): Double {
+    open fun calculateDiscount(products: List<Product>): Double {
         return 0.0
     }
 
     object TwoPer1VoucherPromo : Discount() {
-        override fun discount(products: List<Product>): Double {
+        override fun calculateDiscount(products: List<Product>): Double {
             val group = 2
             val free = 1
 
@@ -17,8 +17,8 @@ sealed class Discount {
         }
     }
 
-    object BulkPromo : Discount() {
-        override fun discount(products: List<Product>): Double {
+    object TShirtBulkPromo : Discount() {
+        override fun calculateDiscount(products: List<Product>): Double {
             val tShirts = products.filterIsInstance<Product.TShirt>()
             return if (tShirts.size >= 3) 1.0 * tShirts.size else 0.0
         }

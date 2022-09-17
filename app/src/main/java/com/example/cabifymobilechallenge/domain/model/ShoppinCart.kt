@@ -6,7 +6,7 @@ data class ShoppingCart(
 ) {
 
     fun total(): Double {
-        val totalDiscount = discounts.sumOf { it.discount(products) }
+        val totalDiscount = discounts.sumOf { it.calculateDiscount(products) }
         return products.sumOf { it.price } - totalDiscount
     }
 

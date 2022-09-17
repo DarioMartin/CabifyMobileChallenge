@@ -43,7 +43,7 @@ class MockStoreRepositoryImpl() : IStoreRepository {
         return Response.Success(
             listOf(
                 Discount.TwoPer1VoucherPromo,
-                Discount.BulkPromo
+                Discount.TShirtBulkPromo
             )
         )
     }

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">CabifyMobileChallenge</string>
+    <string name="empty_cart_message">Empty cart, there are no items in your cart yet.</string>
+    <string name="no_discounts_available">No discounts available</string>
+    <string name="two_x_one_voucher_promo">2 Per 1 Voucher Promo</string>
+    <string name="t_shirt_bulk_promo">T-Shirt bulk promo</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="discount">Discount</string>
+    <string name="place_order">Place order</string>
+    <string name="total">Total</string>
+    <string name="available_discounts">Available discounts</string>
 </resources>
