@@ -96,8 +96,6 @@ fun ProductList(
                     .height(30.dp)
                     .align(Alignment.BottomCenter),
             )
-
-
         }
 
         Column(modifier = Modifier.padding(18.dp)) {

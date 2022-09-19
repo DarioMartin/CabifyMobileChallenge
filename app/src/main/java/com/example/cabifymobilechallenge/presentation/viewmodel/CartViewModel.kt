@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cabifymobilechallenge.data.Response
 import com.example.cabifymobilechallenge.domain.model.Discount
-import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.domain.model.ShoppingCart
 import com.example.cabifymobilechallenge.domain.usecases.CartUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,9 +18,7 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
     ViewModel() {
 
     val uiState: MutableState<CartUIState> = mutableStateOf(CartUIState.Content())
-
-    private var cartProducts = emptyList<Product>()
-    private var cartDiscounts = mutableListOf<Discount>()
+    private var shoppingCart = mutableStateOf(ShoppingCart())
     private var availableDiscounts = emptyList<Discount>()
 
     init {
@@ -35,12 +32,12 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
     private fun loadCartProducts() {
         viewModelScope.launch {
             val newValue = when (val result = useCases.getCartProductsUseCase()) {
-                is Response.Error -> CartUIState.Error(CartError.LoadCartProducts)
+                is Response.Error -> CartUIState.Error
                 is Response.Success -> {
-                    cartProducts = result.data ?: emptyList()
+                    shoppingCart.value =
+                        shoppingCart.value.copy(products = result.data ?: emptyList())
                     CartUIState.Content(
-                        cartProducts = cartProducts,
-                        cartDiscounts = cartDiscounts,
+                        shoppingCart = shoppingCart.value,
                         availableDiscounts = availableDiscounts
                     )
                 }
@@ -53,12 +50,14 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
     private fun loadCartDiscounts() {
         viewModelScope.launch {
             val newValue = when (val result = useCases.getCartDiscountsUseCase()) {
-                is Response.Error -> CartUIState.Error(CartError.LoadCartDiscounts)
+                is Response.Error -> CartUIState.Error
                 is Response.Success -> {
-                    cartDiscounts = result.data?.toMutableList() ?: mutableListOf()
+                    shoppingCart.value =
+                        shoppingCart.value.copy(
+                            discounts = result.data?.toMutableList() ?: mutableListOf()
+                        )
                     CartUIState.Content(
-                        cartProducts = cartProducts,
-                        cartDiscounts = cartDiscounts,
+                        shoppingCart = shoppingCart.value,
                         availableDiscounts = availableDiscounts
                     )
                 }
@@ -71,12 +70,11 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
     private fun loadAvailableDiscounts() {
         viewModelScope.launch {
             uiState.value = when (val result = useCases.getAvailableDiscountsUseCase()) {
-                is Response.Error -> CartUIState.Error(CartError.AvailableDiscounts)
+                is Response.Error -> CartUIState.Error
                 is Response.Success -> {
                     availableDiscounts = result.data ?: emptyList()
                     CartUIState.Content(
-                        cartProducts = cartProducts,
-                        cartDiscounts = cartDiscounts,
+                        shoppingCart = shoppingCart.value,
                         availableDiscounts = availableDiscounts
                     )
                 }
@@ -88,7 +86,7 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
         viewModelScope.launch {
             when (val result = useCases.addDiscountToCartUseCase(discount)) {
                 is Response.Error -> {
-                    CartUIState.Error(CartError.AddDiscount)
+                    CartUIState.Error
                 }
                 is Response.Success -> {
                     if (result.data == true) loadCartDiscounts()
@@ -101,7 +99,7 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
         viewModelScope.launch {
             when (val result = useCases.removeDiscountFromCartUseCase(discount)) {
                 is Response.Error -> {
-                    CartUIState.Error(CartError.RemoveDiscount)
+                    CartUIState.Error
                 }
                 is Response.Success -> {
                     if (result.data == true) loadCartDiscounts()
@@ -110,42 +108,29 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
         }
     }
 
-    fun isDiscountAdded(discount: Discount): Boolean {
-        return cartDiscounts.contains(discount)
-    }
-
     fun getSubTotalPrice(): Double {
-        return cartProducts.sumOf { it.price }
+        return shoppingCart.value.products.sumOf { it.price }
     }
 
     fun getDiscountAmount(): Double {
         return getSubTotalPrice() - getTotalPrice()
     }
 
-    fun getTotalPrice(): Double {
-        return ShoppingCart(cartProducts, cartDiscounts).total()
-    }
-
     fun getCurrency(): Currency {
         return Currency.getInstance("EUR")
+    }
+
+    fun getTotalPrice(): Double {
+        return shoppingCart.value.total()
     }
 
 }
 
 sealed class CartUIState {
     object Loading : CartUIState()
-    data class Error(val error: CartError) : CartUIState()
+    object Error : CartUIState()
     data class Content(
-        val cartProducts: List<Product> = emptyList(),
-        val cartDiscounts: List<Discount> = emptyList(),
+        val shoppingCart: ShoppingCart = ShoppingCart(),
         val availableDiscounts: List<Discount> = emptyList()
     ) : CartUIState()
-}
-
-sealed class CartError {
-    object AddDiscount : CartError()
-    object RemoveDiscount : CartError()
-    object LoadCartProducts : CartError()
-    object LoadCartDiscounts : CartError()
-    object AvailableDiscounts : CartError()
 }

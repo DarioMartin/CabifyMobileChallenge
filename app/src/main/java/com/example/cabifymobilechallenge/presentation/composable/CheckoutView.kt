@@ -1,10 +1,9 @@
 package com.example.cabifymobilechallenge.presentation.composable
 
 import android.icu.util.Currency
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,62 +27,119 @@ fun CheckoutView() {
     val viewModel: CartViewModel = hiltViewModel()
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(18.dp),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Column(modifier = Modifier.weight(6F)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(18.dp)
+            ) {
 
-            Products(
-                modifier = Modifier.weight(1F),
-                uiState = viewModel.uiState.value,
-                currency = viewModel.getCurrency()
+                paintProducts(viewModel)
+
+                item {
+                    Divider(
+                        modifier = Modifier.padding(vertical = 18.dp),
+                        thickness = 0.5.dp
+                    )
+                }
+                paintDiscounts(viewModel)
+            }
+
+            Shadow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(30.dp)
+                    .align(Alignment.BottomCenter),
             )
-
-            Divider(modifier = Modifier.padding(vertical = 18.dp), thickness = 0.5.dp)
-
-            Discounts(
-                modifier = Modifier.weight(1F),
-                uiState = viewModel.uiState.value
-            )
-
-            Divider(modifier = Modifier.padding(vertical = 18.dp), thickness = 0.5.dp)
-
-            SumUp(
-                stringResource(id = R.string.subtotal),
-                viewModel.getSubTotalPrice(),
-                viewModel.getCurrency()
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            SumUp(
-                stringResource(id = R.string.discount),
-                viewModel.getDiscountAmount(),
-                viewModel.getCurrency()
-            )
-
-            Divider(modifier = Modifier.padding(vertical = 18.dp), thickness = 0.5.dp)
         }
 
-        Column(
-            modifier = Modifier
-                .weight(1F)
-                .background(color = MaterialTheme.colors.surface)
+        Summary(viewModel)
+    }
+}
+
+@Composable
+private fun Summary(viewModel: CartViewModel) {
+
+    Column(modifier = Modifier.padding(18.dp)) {
+
+        SumUp(
+            stringResource(id = R.string.subtotal),
+            viewModel.getSubTotalPrice(),
+            viewModel.getCurrency()
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        SumUp(
+            stringResource(id = R.string.discount),
+            viewModel.getDiscountAmount(),
+            viewModel.getCurrency()
+        )
+
+        Divider(modifier = Modifier.padding(vertical = 18.dp), thickness = 1.dp)
+
+        Total(viewModel.getTotalPrice(), viewModel.getCurrency())
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { }
         ) {
+            Text(text = stringResource(R.string.place_order))
+        }
+    }
+}
 
-            Total(viewModel.getTotalPrice(), viewModel.getCurrency())
+private fun LazyListScope.paintProducts(viewModel: CartViewModel) {
+    when (val uiState = viewModel.uiState.value) {
+        CartUIState.Loading -> item { ProgressIndicator() }
+        is CartUIState.Error -> item { Text(text = "Error") }
+        is CartUIState.Content -> {
+            if (uiState.shoppingCart.products.isEmpty()) item { Text(text = stringResource(R.string.empty_cart_message)) }
+            else
+                uiState.shoppingCart.products.map {
+                    item {
+                        CartProductListItem(
+                            product = it,
+                            viewModel.getCurrency()
+                        )
+                    }
+                }
+        }
+    }
+}
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { }
-            ) {
-                Text(text = stringResource(R.string.place_order))
+private fun LazyListScope.paintDiscounts(viewModel: CartViewModel) {
+    when (val uiState = viewModel.uiState.value) {
+        CartUIState.Loading -> item { ProgressIndicator() }
+        is CartUIState.Error -> item { Text(text = "Error") }
+        is CartUIState.Content -> {
+            if (uiState.availableDiscounts.isEmpty()) item { Text(text = stringResource(R.string.no_discounts_available)) }
+            else {
+                item {
+                    Text(
+                        text = stringResource(id = R.string.available_discounts),
+                        style = MaterialTheme.typography.subtitle1,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+                uiState.availableDiscounts.map {
+                    item {
+                        DiscountListItem(
+                            discount = it,
+                            checked = uiState.shoppingCart.discounts.contains(it)
+                        )
+                    }
+                }
             }
         }
     }
@@ -127,57 +183,6 @@ private fun Total(totalPrice: Double, currency: Currency) {
     }
 }
 
-@Composable
-fun Products(uiState: CartUIState, currency: Currency, modifier: Modifier = Modifier) {
-    when (uiState) {
-        CartUIState.Loading -> ProgressIndicator()
-        is CartUIState.Error -> {}
-        is CartUIState.Content -> {
-            if (uiState.cartProducts.isEmpty()) Text(text = stringResource(R.string.empty_cart_message))
-            else LazyColumn(
-                modifier = modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(top = 12.dp, end = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                content = {
-                    items(uiState.cartProducts) {
-                        CartProductListItem(product = it, currency)
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun Discounts(uiState: CartUIState, modifier: Modifier = Modifier) {
-    when (uiState) {
-        CartUIState.Loading -> ProgressIndicator()
-        is CartUIState.Error -> {
-        }
-        is CartUIState.Content -> {
-            if (uiState.availableDiscounts.isEmpty()) Text(text = stringResource(R.string.no_discounts_available))
-            else {
-                Column(modifier.fillMaxWidth()) {
-                    Text(
-                        text = stringResource(id = R.string.available_discounts),
-                        style = MaterialTheme.typography.subtitle1,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    LazyColumn(
-                        content = {
-                            items(uiState.availableDiscounts) {
-                                DiscountListItem(
-                                    discount = it,
-                                    checked = uiState.cartDiscounts.contains(it)
-                                )
-                            }
-                        }
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun DiscountListItem(discount: Discount, checked: Boolean) {
@@ -200,7 +205,9 @@ fun DiscountListItem(discount: Discount, checked: Boolean) {
 @Composable
 fun CartProductListItem(product: Product, currency: Currency) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 3.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
