@@ -22,7 +22,7 @@ import com.example.cabifymobilechallenge.presentation.viewmodel.CartUIState
 import com.example.cabifymobilechallenge.presentation.viewmodel.CartViewModel
 
 @Composable
-fun CheckoutView() {
+fun CheckoutView(onPlaceOrder: () -> Unit) {
 
     val viewModel: CartViewModel = hiltViewModel()
 
@@ -61,12 +61,12 @@ fun CheckoutView() {
             )
         }
 
-        Summary(viewModel)
+        Summary(onPlaceOrder = onPlaceOrder)
     }
 }
 
 @Composable
-private fun Summary(viewModel: CartViewModel) {
+private fun Summary(viewModel: CartViewModel = hiltViewModel(), onPlaceOrder: () -> Unit) {
 
     Column(modifier = Modifier.padding(18.dp)) {
 
@@ -92,7 +92,7 @@ private fun Summary(viewModel: CartViewModel) {
 
         Button(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { }
+            onClick = { onPlaceOrder() }
         ) {
             Text(text = stringResource(R.string.place_order))
         }

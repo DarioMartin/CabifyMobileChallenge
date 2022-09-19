@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.cabifymobilechallenge.R
 import com.example.cabifymobilechallenge.presentation.composable.CheckoutView
+import com.example.cabifymobilechallenge.presentation.composable.OrderView
 import com.example.cabifymobilechallenge.presentation.composable.ProductListView
 import com.example.cabifymobilechallenge.presentation.theme.CabifyMobileChallengeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val PRODUCT_LIST = "product_list"
         private const val CHECKOUT = "checkout"
+        private const val ORDER = "order"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +56,15 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable(CHECKOUT) {
-                                CheckoutView()
+                                CheckoutView {
+                                    navController.navigate(ORDER)
+                                }
+                            }
+
+                            composable(ORDER) {
+                                OrderView {
+                                    navController.navigate(PRODUCT_LIST)
+                                }
                             }
                         }
                     }
