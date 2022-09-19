@@ -16,19 +16,19 @@ class MockStoreRepositoryImpl() : IStoreRepository {
             listOf(
                 Product.Voucher("Vochure", 5.0),
                 Product.TShirt("Tshirt", 20.0),
-                Product.Mug("Mug", 7.5),
+                Product.Mug("Mug", 7.5)
             )
         )
     }
 
-    override suspend fun addProductToCart(product: Product): Response<Boolean> {
+    override suspend fun addProductToCart(product: Product): Response<Unit> {
         cartProducts.add(product)
-        return Response.Success(true)
+        return Response.Success(Unit)
     }
 
-    override suspend fun removeProductFromCart(product: Product): Response<Boolean> {
+    override suspend fun removeProductFromCart(product: Product): Response<Unit> {
         cartProducts.remove(product)
-        return Response.Success(true)
+        return Response.Success(Unit)
     }
 
     override suspend fun makePayment(shoppingCart: ShoppingCart): Response<Boolean> {

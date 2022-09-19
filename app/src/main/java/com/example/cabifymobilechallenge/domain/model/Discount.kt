@@ -1,10 +1,6 @@
 package com.example.cabifymobilechallenge.domain.model
 
-sealed class Discount {
-
-    open fun calculateDiscount(products: List<Product>): Double {
-        return 0.0
-    }
+sealed class Discount : DiscountCalculator {
 
     object TwoPer1VoucherPromo : Discount() {
         override fun calculateDiscount(products: List<Product>): Double {
@@ -24,4 +20,8 @@ sealed class Discount {
         }
     }
 
+}
+
+interface DiscountCalculator {
+    fun calculateDiscount(products: List<Product>): Double
 }

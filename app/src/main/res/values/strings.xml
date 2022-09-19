@@ -9,4 +9,12 @@
     <string name="place_order">Place order</string>
     <string name="total">Total</string>
     <string name="available_discounts">Available discounts</string>
+    <string name="cd_add_item">Add item</string>
+    <string name="cd_delete_item">Delete item</string>
+    <string name="proceed_to_checkout">Proceed to checkout</string>
+    <string name="product_list_error_title">There was a problem</string>
+    <string name="product_list_error_body">We couldn\'t get any products, please try again later.</string>
+    <string name="product_empty_list_title">Empty list</string>
+    <string name="product_empty_list_body">No products found, please try again later.</string>
+    <string name="error_updating_quantity">Couldn\'t perform the action</string>
 </resources>

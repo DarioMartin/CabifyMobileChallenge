@@ -12,11 +12,11 @@ class StoreRepositoryImpl() : IStoreRepository {
         return Response.Error("")
     }
 
-    override suspend fun addProductToCart(product: Product): Response<Boolean> {
+    override suspend fun addProductToCart(product: Product): Response<Unit> {
         return Response.Error("")
     }
 
-    override suspend fun removeProductFromCart(product: Product): Response<Boolean> {
+    override suspend fun removeProductFromCart(product: Product): Response<Unit> {
         return Response.Error("")
     }
 
