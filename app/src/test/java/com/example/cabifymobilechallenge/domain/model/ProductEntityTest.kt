@@ -3,7 +3,7 @@ package com.example.cabifymobilechallenge.domain.model
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-internal class ProductTest {
+internal class ProductEntityTest {
 
     //https://github.com/cabify/MobileChallenge
 
@@ -13,8 +13,8 @@ internal class ProductTest {
 
     private val discounts: List<Discount> =
         listOf(
-            Discount.TwoPer1VoucherPromo,
-            Discount.BulkPromo
+            Discount.TwoPer1VoucherPromo.apply { active = true },
+            Discount.TShirtBulkPromo.apply { active = true }
         )
 
     @Test

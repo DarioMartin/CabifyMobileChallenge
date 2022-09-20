@@ -17,11 +17,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductListViewModel @Inject constructor(private val useCases: ProductListUseCases) :
+class ProductListViewModel @Inject constructor(
+    var currency: Currency,
+    private val useCases: ProductListUseCases
+) :
     ViewModel() {
 
     val uiState: MutableState<UIState> = mutableStateOf(UIState.Empty)
-    private var selectedProducts = mutableStateListOf<Product>()
+    var products = mutableStateListOf<Product>()
 
     private var _updateErrorFlow = MutableSharedFlow<Unit>()
     var updateErrorFlow: SharedFlow<Unit> = _updateErrorFlow.asSharedFlow()
@@ -36,23 +39,19 @@ class ProductListViewModel @Inject constructor(private val useCases: ProductList
             uiState.value = when (val result = useCases.getProductsUseCase()) {
                 is Response.Error -> UIState.Error
                 is Response.Success -> {
-                    val products = result.data
-                    if (products.isNullOrEmpty()) UIState.Empty
-                    else UIState.Content(result.data)
+                    products.clear()
+                    products.addAll(result.data ?: emptyList())
+                    UIState.Success
                 }
             }
         }
-    }
-
-    fun itemCount(product: Product): Int {
-        return selectedProducts.count { it == product }
     }
 
     fun addProduct(product: Product) {
         viewModelScope.launch {
             when (useCases.addProductToCartUseCase(product)) {
                 is Response.Error -> _updateErrorFlow.emit(Unit)
-                is Response.Success -> selectedProducts.add(product)
+                is Response.Success -> updateProduct(product) { it.increment() }
             }
         }
     }
@@ -61,16 +60,22 @@ class ProductListViewModel @Inject constructor(private val useCases: ProductList
         viewModelScope.launch {
             when (useCases.removeProductsFromCartUseCase(product)) {
                 is Response.Error -> _updateErrorFlow.emit(Unit)
-                is Response.Success -> selectedProducts.remove(product)
+                is Response.Success -> updateProduct(product) { it.decrement() }
+
             }
         }
     }
 
-    fun getCurrency(): Currency {
-        return Currency.getInstance("EUR")
+    private fun updateProduct(product: Product, action: (Product) -> Unit) {
+        val index = products.indexOfFirst { it.javaClass == product.javaClass }
+        if (index >= 0) {
+            val p: Product = products[index]
+            products.remove(p)
+            action(p)
+            products.add(index, p)
+        }
     }
 
-    fun isCartEmpty() = selectedProducts.isEmpty()
 }
 
 
@@ -78,5 +83,5 @@ sealed class UIState {
     object Loading : UIState()
     object Error : UIState()
     object Empty : UIState()
-    data class Content(val products: List<Product>) : UIState()
+    object Success : UIState()
 }

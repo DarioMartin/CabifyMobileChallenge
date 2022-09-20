@@ -1,11 +1,11 @@
 package com.example.cabifymobilechallenge.data.repository
 
 import com.example.cabifymobilechallenge.data.Response
-import com.example.cabifymobilechallenge.data.local.LocalDataSource
 import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.domain.model.ShoppingCart
 import com.example.cabifymobilechallenge.domain.repository.IStoreRepository
+import kotlinx.coroutines.flow.Flow
 
 class StoreRepositoryImpl(
     private val remoteDataSource: IRemoteDataSource,
@@ -40,12 +40,29 @@ class StoreRepositoryImpl(
         return localDataSource.getCartDiscounts()
     }
 
-    override suspend fun addDiscountToCart(discount: Discount): Response<Unit> {
-        return localDataSource.addDiscountToCart(discount)
+    override suspend fun activateDiscount(discount: Discount): Response<Unit> {
+        return localDataSource.updateDiscount(discount.apply { active = true })
     }
 
-    override suspend fun removeDiscountFromCart(discount: Discount): Response<Unit> {
-        return localDataSource.removeDiscountFromCart(discount)
+    override suspend fun deactivateDiscount(discount: Discount): Response<Unit> {
+        return localDataSource.updateDiscount(discount.apply { active = false })
     }
+
+    override suspend fun getProductCount(product: Product): Response<Int> {
+        return localDataSource.getProductCount(product)
+    }
+
+    override suspend fun addDiscountsToCart(discounts: List<Discount>): Response<Unit> {
+        return localDataSource.addDiscounts(discounts)
+    }
+
+    override suspend fun clearProducts(): Response<Unit> {
+        return localDataSource.clearProducts()
+    }
+
+    override suspend fun clearDiscounts(): Response<Unit> {
+        return localDataSource.clearDiscounts()
+    }
+
 
 }

@@ -21,4 +21,5 @@ fun Double.formatAsCurrency(currency: Currency): String {
     formatter.format("%(,.2f", this)
 
     return "${stringBuilder}${currency.symbol}"
+
 }
