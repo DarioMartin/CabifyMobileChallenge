@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty_cart_message">Cesta vacía, aún no hay artículos en su cesta.</string>
+    <string name="no_discounts_available">No hay descuentos disponibles</string>
+    <string name="two_x_one_voucher_promo">2 por 1 en vales</string>
+    <string name="t_shirt_bulk_promo">Promoción en camisetas</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="discount">Descuento</string>
+    <string name="place_order">Hacer pedido</string>
+    <string name="total">Total</string>
+    <string name="available_discounts">Descuentos disponibles</string>
+    <string name="cd_add_item">Añadir item</string>
+    <string name="cd_delete_item">Eliminar item</string>
+    <string name="proceed_to_checkout">Pasar por caja</string>
+    <string name="product_list_error_title">Ha habido un problema</string>
+    <string name="product_list_error_body">No hemos podido conseguir ningún producto, por favor inténtelo más tarde.</string>
+    <string name="product_empty_list_title">Lista vacía</string>
+    <string name="product_empty_list_body">No se han encontrado productos, por favor, inténtelo más tarde.</string>
+    <string name="error_updating_quantity">No se ha podido realizar la acción</string>
+    <string name="error_updating_discounts">No se ha podido realizar la acción</string>
+    <string name="error_get_discounts">No hemos podido cargar los descuentos, por favor inténtelo más tarde.</string>
+    <string name="error_get_products">No hemos podido cargar los productos, por favor, inténtelo más tarde.</string>
+    <string name="order_error_title">Pedido no realizado</string>
+    <string name="order_error_body">Su pedido no ha podido ser completado</string>
+    <string name="try_again">Intentar de nuevo</string>
+    <string name="order_success_title">Pedido completado</string>
+    <string name="order_success_body">Su pedido se ha completado con éxito</string>
+    <string name="buy_again">Comprar de nuevo</string>
+</resources>

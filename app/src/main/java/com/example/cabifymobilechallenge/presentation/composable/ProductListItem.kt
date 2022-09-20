@@ -138,8 +138,8 @@ fun ProductListItemPrev() {
         ProductListItem(
             product = Product.Voucher(
                 name = "Voucher",
-                price = 100.0
-            ),
+                price = 15.75
+            ).apply { count = 10 },
             currency = Currency.getInstance("EUR"),
             onAdd = {},
             onRemove = {}

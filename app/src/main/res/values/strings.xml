@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cabify Store</string>
+    <string name="app_name" translatable="false">Cabify Store</string>
     <string name="empty_cart_message">Empty cart, there are no items in your cart yet.</string>
     <string name="no_discounts_available">No discounts available</string>
     <string name="two_x_one_voucher_promo">2 Per 1 Voucher Promo</string>
@@ -18,9 +18,9 @@
     <string name="product_empty_list_body">No products found, please try again later.</string>
     <string name="error_updating_quantity">Couldn\'t perform the action</string>
     <string name="error_updating_discounts">Couldn\'t perform the action</string>
-    <string name="error_get_discounts">We couldn\'t load the discounts, please try again later</string>
-    <string name="error_get_products">We couldn\'t load the products, please try again later</string>
-    <string name="order_error_title">Order failed</string>
+    <string name="error_get_discounts">We couldn\'t load the discounts, please try again later.</string>
+    <string name="error_get_products">We couldn\'t load the products, please try again later.</string>
+    <string name="order_error_title">Order not placed</string>
     <string name="order_error_body">Your order could not be completed</string>
     <string name="try_again">Try again</string>
     <string name="order_success_title">Order completed</string>
