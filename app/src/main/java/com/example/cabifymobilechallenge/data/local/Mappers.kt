@@ -1,9 +1,11 @@
 package com.example.cabifymobilechallenge.data.local
 
+import com.example.cabifymobilechallenge.data.local.entity.DiscountEntity
 import com.example.cabifymobilechallenge.data.local.entity.ProductEntity
+import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
 
-fun ProductEntity.toDomainProduct(): Product {
+fun ProductEntity.toDomain(): Product {
     return when (this.type) {
         "VOUCHER" -> Product.Voucher(name = this.name, price = this.price)
         "TSHIRT" -> Product.TShirt(name = this.name, price = this.price)
@@ -12,7 +14,7 @@ fun ProductEntity.toDomainProduct(): Product {
     }
 }
 
-fun Product.toProductEntity(): ProductEntity {
+fun Product.toEntity(): ProductEntity {
     val type = when (this) {
         is Product.Voucher -> "VOUCHER"
         is Product.TShirt -> "TSHIRT"
@@ -22,3 +24,26 @@ fun Product.toProductEntity(): ProductEntity {
 }
 
 class InvalidProductException : Exception("Invalid product code")
+
+
+fun DiscountEntity.toDomain(): Discount {
+    return when (this.id) {
+        Discount.TwoPer1VoucherPromo::class.simpleName -> Discount.TwoPer1VoucherPromo.apply {
+            active = active
+        }
+        Discount.TShirtBulkPromo::class.simpleName -> Discount.TShirtBulkPromo.apply {
+            active = active
+        }
+        else -> throw InvalidDiscountException()
+    }
+}
+
+fun Discount.toEntity(): DiscountEntity {
+    val id = when (this) {
+        Discount.TShirtBulkPromo -> this::class.simpleName
+        Discount.TwoPer1VoucherPromo -> this::class.simpleName
+    }
+    return DiscountEntity(id = id ?: "", active = this.active)
+}
+
+class InvalidDiscountException : Exception("Invalid discount id")

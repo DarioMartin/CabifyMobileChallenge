@@ -51,8 +51,8 @@ object AppModule {
         return CartUseCases(
             getCartProductsUseCase = GetCartProductsUseCase(repository),
             getAvailableDiscountsUseCase = GetAvailableDiscountsUseCase(repository),
-            addDiscountToCartUseCase = AddDiscountToCartUseCase(repository),
-            removeDiscountFromCartUseCase = RemoveDiscountFromCartUseCase(repository),
+            activateDiscountUseCase = ActivateDiscountUseCase(repository),
+            deactivateDiscountUseCase = DeactivateDiscountUseCase(repository),
             getCartDiscountsUseCase = GetCartDiscountsUseCase(repository),
             getCartUseCase = GetCartUseCase(repository)
         )

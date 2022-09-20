@@ -5,9 +5,13 @@ data class ShoppingCart(
     val discounts: List<Discount> = emptyList()
 ) {
 
+    fun subTotal() = products.sumOf { it.price }
+
+    fun getDiscount() =
+        discounts.filter { it.active }.sumOf { it.calculateDiscount(products) }
+
     fun total(): Double {
-        val totalDiscount = discounts.sumOf { it.calculateDiscount(products) }
-        return products.sumOf { it.price } - totalDiscount
+        return subTotal() - getDiscount()
     }
 
 }

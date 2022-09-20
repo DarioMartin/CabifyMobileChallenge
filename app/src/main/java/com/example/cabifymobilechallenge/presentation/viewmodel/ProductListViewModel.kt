@@ -68,10 +68,12 @@ class ProductListViewModel @Inject constructor(
 
     private fun updateProduct(product: Product, action: (Product) -> Unit) {
         val index = products.indexOfFirst { it.javaClass == product.javaClass }
-        val p: Product = products[index]
-        products.remove(p)
-        action(p)
-        products.add(index, p)
+        if (index >= 0) {
+            val p: Product = products[index]
+            products.remove(p)
+            action(p)
+            products.add(index, p)
+        }
     }
 
 }

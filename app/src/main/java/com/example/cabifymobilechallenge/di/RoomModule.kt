@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.cabifymobilechallenge.data.local.LocalDataSource
 import com.example.cabifymobilechallenge.data.local.StoreDatabase
+import com.example.cabifymobilechallenge.data.local.dao.DiscountDao
 import com.example.cabifymobilechallenge.data.local.dao.ProductDao
 import com.example.cabifymobilechallenge.data.repository.ILocalDataSource
 import dagger.Module
@@ -28,10 +29,14 @@ object RoomModule {
     @Provides
     fun provideProductDao(db: StoreDatabase) = db.getProductDao()
 
+    @Singleton
+    @Provides
+    fun provideDiscountDao(db: StoreDatabase) = db.getDiscountDao()
+
     @Provides
     @Singleton
-    fun providesLocalDataSource(productDao: ProductDao): ILocalDataSource {
-        return LocalDataSource(productDao)
+    fun providesLocalDataSource(productDao: ProductDao, discountDao: DiscountDao): ILocalDataSource {
+        return LocalDataSource(productDao, discountDao)
     }
 
 

@@ -13,8 +13,8 @@ internal class ProductEntityTest {
 
     private val discounts: List<Discount> =
         listOf(
-            Discount.TwoPer1VoucherPromo,
-            Discount.TShirtBulkPromo
+            Discount.TwoPer1VoucherPromo.apply { active = true },
+            Discount.TShirtBulkPromo.apply { active = true }
         )
 
     @Test

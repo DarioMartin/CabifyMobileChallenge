@@ -1,13 +1,16 @@
 package com.example.cabifymobilechallenge.presentation.composable
 
 import android.icu.util.Currency
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cabifymobilechallenge.R
 import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
+import com.example.cabifymobilechallenge.domain.model.ShoppingCart
 import com.example.cabifymobilechallenge.presentation.formatAsCurrency
 import com.example.cabifymobilechallenge.presentation.getDiscountName
 import com.example.cabifymobilechallenge.presentation.viewmodel.CartUIState
@@ -24,7 +28,18 @@ import com.example.cabifymobilechallenge.presentation.viewmodel.CartViewModel
 @Composable
 fun CheckoutView(onPlaceOrder: () -> Unit) {
 
+    val context = LocalContext.current
     val viewModel: CartViewModel = hiltViewModel()
+
+    LaunchedEffect(Unit) {
+        viewModel.updateErrorFlow.collect {
+            Toast.makeText(
+                context,
+                context.getString(R.string.error_updating_quantity),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -50,6 +65,7 @@ fun CheckoutView(onPlaceOrder: () -> Unit) {
                         thickness = 0.5.dp
                     )
                 }
+
                 paintDiscounts(viewModel)
             }
 
@@ -61,32 +77,42 @@ fun CheckoutView(onPlaceOrder: () -> Unit) {
             )
         }
 
-        Summary(onPlaceOrder = onPlaceOrder)
+        val products = viewModel.products
+        val discounts = viewModel.discounts
+
+        Summary(
+            shoppingCart = ShoppingCart(products, discounts),
+            currency = viewModel.currency
+        ) { onPlaceOrder() }
     }
 }
 
 @Composable
-private fun Summary(viewModel: CartViewModel = hiltViewModel(), onPlaceOrder: () -> Unit) {
+private fun Summary(
+    shoppingCart: ShoppingCart,
+    currency: Currency,
+    onPlaceOrder: () -> Unit
+) {
 
     Column(modifier = Modifier.padding(18.dp)) {
 
         SumUp(
             stringResource(id = R.string.subtotal),
-            viewModel.getSubTotalPrice(),
-            viewModel.currency
+            shoppingCart.subTotal(),
+            currency
         )
 
         Spacer(modifier = Modifier.height(6.dp))
 
         SumUp(
             stringResource(id = R.string.discount),
-            viewModel.getDiscountAmount(),
-            viewModel.currency
+            shoppingCart.getDiscount(),
+            currency
         )
 
         Divider(modifier = Modifier.padding(vertical = 18.dp), thickness = 1.dp)
 
-        Total(viewModel.getTotalPrice(), viewModel.currency)
+        Total(shoppingCart.total(), currency)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -100,30 +126,31 @@ private fun Summary(viewModel: CartViewModel = hiltViewModel(), onPlaceOrder: ()
 }
 
 private fun LazyListScope.paintProducts(viewModel: CartViewModel) {
-    when (val uiState = viewModel.uiState.value) {
+    when (viewModel.uiState) {
         CartUIState.Loading -> item { ProgressIndicator() }
-        is CartUIState.Error -> item { Text(text = "Error") }
-        is CartUIState.Content -> {
-            if (uiState.shoppingCart.products.isEmpty()) item { Text(text = stringResource(R.string.empty_cart_message)) }
-            else
-                uiState.shoppingCart.products.map {
-                    item {
-                        CartProductListItem(
-                            product = it,
-                            viewModel.currency
-                        )
-                    }
+        is CartUIState.Error -> item { Text(text = stringResource(R.string.error_get_products)) }
+        is CartUIState.Success -> {
+            val products = viewModel.products
+            if (products.isEmpty()) item { Text(text = stringResource(R.string.empty_cart_message)) }
+            else products.map {
+                item {
+                    CartProductListItem(
+                        product = it,
+                        viewModel.currency
+                    )
                 }
+            }
         }
     }
 }
 
 private fun LazyListScope.paintDiscounts(viewModel: CartViewModel) {
-    when (val uiState = viewModel.uiState.value) {
+    when (viewModel.uiState) {
         CartUIState.Loading -> item { ProgressIndicator() }
-        is CartUIState.Error -> item { Text(text = "Error") }
-        is CartUIState.Content -> {
-            if (uiState.availableDiscounts.isEmpty()) item { Text(text = stringResource(R.string.no_discounts_available)) }
+        is CartUIState.Error -> item { Text(text = stringResource(R.string.error_get_discounts)) }
+        is CartUIState.Success -> {
+            val discounts = viewModel.discounts
+            if (discounts.isEmpty()) item { Text(text = stringResource(R.string.no_discounts_available)) }
             else {
                 item {
                     Text(
@@ -132,7 +159,7 @@ private fun LazyListScope.paintDiscounts(viewModel: CartViewModel) {
                         fontWeight = FontWeight.SemiBold
                     )
                 }
-                uiState.availableDiscounts.map {
+                discounts.map {
                     item {
                         DiscountListItem(discount = it)
                     }

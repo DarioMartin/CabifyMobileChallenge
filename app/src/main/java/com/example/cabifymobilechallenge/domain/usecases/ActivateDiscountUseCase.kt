@@ -4,9 +4,10 @@ import com.example.cabifymobilechallenge.data.Response
 import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.repository.IStoreRepository
 
-class RemoveDiscountFromCartUseCase(private val repository: IStoreRepository) {
+class ActivateDiscountUseCase(val repository: IStoreRepository) {
 
     suspend operator fun invoke(discount: Discount): Response<Unit> {
-        return repository.removeDiscountFromCart(discount)
+        return repository.activateDiscount(discount)
     }
+
 }

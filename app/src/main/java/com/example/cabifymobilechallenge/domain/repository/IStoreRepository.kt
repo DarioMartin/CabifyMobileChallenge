@@ -16,9 +16,10 @@ interface IStoreRepository {
 
     suspend fun getAvailableDiscounts(): Response<List<Discount>>
     suspend fun getCartDiscounts(): Response<List<Discount>>
-    suspend fun addDiscountToCart(discount: Discount): Response<Unit>
-    suspend fun removeDiscountFromCart(discount: Discount): Response<Unit>
+    suspend fun activateDiscount(discount: Discount): Response<Unit>
+    suspend fun deactivateDiscount(discount: Discount): Response<Unit>
 
     suspend fun makePayment(shoppingCart: ShoppingCart): Response<Unit>
+    suspend fun addDiscountsToCart(discounts: List<Discount>): Response<Unit>
 
 }
