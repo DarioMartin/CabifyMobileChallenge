@@ -1,7 +1,9 @@
 package com.example.cabifymobilechallenge.di
 
 import com.example.cabifymobilechallenge.BuildConfig
+import com.example.cabifymobilechallenge.data.local.LocalDataSource
 import com.example.cabifymobilechallenge.data.local.MockedLocalDataSource
+import com.example.cabifymobilechallenge.data.local.dao.ProductDao
 import com.example.cabifymobilechallenge.data.remote.ServerDataSource
 import com.example.cabifymobilechallenge.data.remote.StoreApi
 import com.example.cabifymobilechallenge.data.repository.ILocalDataSource
@@ -33,8 +35,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesLocalDataSource(): ILocalDataSource {
-        return MockedLocalDataSource()
+    fun providesLocalDataSource(productDao: ProductDao): ILocalDataSource {
+        return LocalDataSource(productDao)
     }
 
     @Provides

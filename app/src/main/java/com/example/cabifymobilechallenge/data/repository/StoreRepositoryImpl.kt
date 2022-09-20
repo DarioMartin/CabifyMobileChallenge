@@ -6,6 +6,7 @@ import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.domain.model.ShoppingCart
 import com.example.cabifymobilechallenge.domain.repository.IStoreRepository
+import kotlinx.coroutines.flow.Flow
 
 class StoreRepositoryImpl(
     private val remoteDataSource: IRemoteDataSource,
@@ -28,7 +29,7 @@ class StoreRepositoryImpl(
         return remoteDataSource.makePayment()
     }
 
-    override suspend fun getCartProducts(): Response<List<Product>> {
+    override suspend fun getCartProducts(): Response<Flow<List<Product>>> {
         return localDataSource.getCartProducts()
     }
 
@@ -46,6 +47,10 @@ class StoreRepositoryImpl(
 
     override suspend fun removeDiscountFromCart(discount: Discount): Response<Unit> {
         return localDataSource.removeDiscountFromCart(discount)
+    }
+
+    override suspend fun getProductCount(product: Product): Response<Int> {
+        return localDataSource.getProductCount(product)
     }
 
 }

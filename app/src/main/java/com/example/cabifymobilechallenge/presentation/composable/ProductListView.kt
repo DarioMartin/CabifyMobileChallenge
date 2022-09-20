@@ -15,16 +15,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cabifymobilechallenge.R
-import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.presentation.viewmodel.ProductListViewModel
 import com.example.cabifymobilechallenge.presentation.viewmodel.UIState
 
 @Composable
 fun ProductListView(viewModel: ProductListViewModel = hiltViewModel(), onCheckOut: () -> Unit) {
 
-    when (val uiState = viewModel.uiState.value) {
-        is UIState.Content -> ProductList(
-            products = uiState.products,
+    when (viewModel.uiState.value) {
+        is UIState.Success -> ProductList(
             onCheckOut = { onCheckOut() })
         UIState.Error -> Message(
             title = stringResource(R.string.product_list_error_title),
@@ -41,11 +39,11 @@ fun ProductListView(viewModel: ProductListViewModel = hiltViewModel(), onCheckOu
 
 @Composable
 fun ProductList(
-    products: List<Product>,
     viewModel: ProductListViewModel = hiltViewModel(),
     onCheckOut: () -> Unit
 ) {
     val context = LocalContext.current
+    val products = viewModel.products
 
     LaunchedEffect(Unit) {
         viewModel.updateErrorFlow.collect {
@@ -81,7 +79,6 @@ fun ProductList(
                     items(products) {
                         ProductListItem(
                             product = it,
-                            itemCount = viewModel.itemCount(it),
                             currency = viewModel.getCurrency(),
                             onAdd = { viewModel.addProduct(it) },
                             onRemove = { viewModel.removeProduct(it) }
@@ -101,7 +98,7 @@ fun ProductList(
         Column(modifier = Modifier.padding(18.dp)) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                enabled = !viewModel.isCartEmpty(),
+                enabled = products.any { it.count > 0 },
                 onClick = { onCheckOut() }) {
                 Text(text = stringResource(R.string.proceed_to_checkout))
             }

@@ -29,7 +29,6 @@ import com.example.cabifymobilechallenge.presentation.theme.CabifyMobileChalleng
 @Composable
 fun ProductListItem(
     product: Product,
-    itemCount: Int,
     currency: Currency,
     onAdd: () -> Unit,
     onRemove: () -> Unit
@@ -82,7 +81,7 @@ fun ProductListItem(
 
         Spacer(modifier = Modifier.width(18.dp))
 
-        val removeEnabled = itemCount > 0
+        val removeEnabled = product.count > 0
 
         Row(
             modifier = Modifier
@@ -111,7 +110,7 @@ fun ProductListItem(
             Spacer(modifier = Modifier.width(12.dp))
 
             Text(
-                text = itemCount.toString(),
+                text = product.count.toString(),
                 style = MaterialTheme.typography.body1,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
@@ -139,9 +138,8 @@ fun ProductListItemPrev() {
         ProductListItem(
             product = Product.Voucher(
                 name = "Voucher",
-                price = 100.0,
+                price = 100.0
             ),
-            itemCount = 3,
             currency = Currency.getInstance("EUR"),
             onAdd = {},
             onRemove = {}

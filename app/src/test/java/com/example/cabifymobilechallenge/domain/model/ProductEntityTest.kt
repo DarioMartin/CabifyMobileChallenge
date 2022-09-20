@@ -3,7 +3,7 @@ package com.example.cabifymobilechallenge.domain.model
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-internal class ProductTest {
+internal class ProductEntityTest {
 
     //https://github.com/cabify/MobileChallenge
 
