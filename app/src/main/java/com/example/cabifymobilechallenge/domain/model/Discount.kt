@@ -1,6 +1,6 @@
 package com.example.cabifymobilechallenge.domain.model
 
-sealed class Discount : DiscountCalculator {
+sealed class Discount(var active: Boolean = false) : DiscountCalculator {
 
     object TwoPer1VoucherPromo : Discount() {
         override fun calculateDiscount(products: List<Product>): Double {

@@ -134,10 +134,7 @@ private fun LazyListScope.paintDiscounts(viewModel: CartViewModel) {
                 }
                 uiState.availableDiscounts.map {
                     item {
-                        DiscountListItem(
-                            discount = it,
-                            checked = uiState.shoppingCart.discounts.contains(it)
-                        )
+                        DiscountListItem(discount = it)
                     }
                 }
             }
@@ -185,7 +182,7 @@ private fun Total(totalPrice: Double, currency: Currency) {
 
 
 @Composable
-fun DiscountListItem(discount: Discount, checked: Boolean) {
+fun DiscountListItem(discount: Discount) {
     val viewModel: CartViewModel = hiltViewModel()
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -196,7 +193,7 @@ fun DiscountListItem(discount: Discount, checked: Boolean) {
             text = stringResource(id = getDiscountName(discount)),
             style = MaterialTheme.typography.body1
         )
-        Checkbox(checked = checked, onCheckedChange = { isChecked ->
+        Checkbox(checked = discount.active, onCheckedChange = { isChecked ->
             if (isChecked) viewModel.addDiscount(discount) else viewModel.removeDiscount(discount)
         })
     }

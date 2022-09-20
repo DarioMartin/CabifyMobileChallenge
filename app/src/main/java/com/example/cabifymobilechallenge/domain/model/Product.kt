@@ -15,5 +15,3 @@ sealed class Product(val name: String, val price: Double, var count: Int = 0) {
     class Mug(name: String, price: Double) : Product(name, price)
 }
 
-//CURRENCY
-
