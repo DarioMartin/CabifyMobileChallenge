@@ -84,26 +84,19 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
 
     fun addDiscount(discount: Discount) {
         viewModelScope.launch {
-            when (val result = useCases.addDiscountToCartUseCase(discount)) {
-                is Response.Error -> {
-                    CartUIState.Error
-                }
-                is Response.Success -> {
-                    if (result.data == true) loadCartDiscounts()
-                }
+            when (useCases.addDiscountToCartUseCase(discount)) {
+                is Response.Error -> CartUIState.Error
+                is Response.Success -> loadCartDiscounts()
+
             }
         }
     }
 
     fun removeDiscount(discount: Discount) {
         viewModelScope.launch {
-            when (val result = useCases.removeDiscountFromCartUseCase(discount)) {
-                is Response.Error -> {
-                    CartUIState.Error
-                }
-                is Response.Success -> {
-                    if (result.data == true) loadCartDiscounts()
-                }
+            when (useCases.removeDiscountFromCartUseCase(discount)) {
+                is Response.Error -> CartUIState.Error
+                is Response.Success -> loadCartDiscounts()
             }
         }
     }

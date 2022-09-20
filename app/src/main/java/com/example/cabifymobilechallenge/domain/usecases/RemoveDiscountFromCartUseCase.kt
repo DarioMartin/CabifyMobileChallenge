@@ -6,7 +6,7 @@ import com.example.cabifymobilechallenge.domain.repository.IStoreRepository
 
 class RemoveDiscountFromCartUseCase(private val repository: IStoreRepository) {
 
-    suspend operator fun invoke(discount: Discount): Response<Boolean> {
+    suspend operator fun invoke(discount: Discount): Response<Unit> {
         return repository.removeDiscountFromCart(discount)
     }
 }

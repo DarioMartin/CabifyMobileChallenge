@@ -5,29 +5,29 @@ import com.example.cabifymobilechallenge.data.repository.ILocalDataSource
 import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
 
-class LocalDataSource : ILocalDataSource {
+class MockedLocalDataSource : ILocalDataSource {
     override suspend fun getCartProducts(): Response<List<Product>> {
-        TODO("Not yet implemented")
+        return Response.Success(emptyList())
     }
 
     override suspend fun addProductToCart(product: Product): Response<Unit> {
-        TODO("Not yet implemented")
+        return Response.Success(Unit)
     }
 
     override suspend fun removeProductFromCart(product: Product): Response<Unit> {
-        TODO("Not yet implemented")
+        return Response.Success(Unit)
     }
 
     override suspend fun removeDiscountFromCart(discount: Discount): Response<Unit> {
-        TODO("Not yet implemented")
+        return Response.Success(Unit)
     }
 
     override suspend fun addDiscountToCart(discount: Discount): Response<Unit> {
-        TODO("Not yet implemented")
+        return Response.Success(Unit)
     }
 
     override suspend fun getCartDiscounts(): Response<List<Discount>> {
-        TODO("Not yet implemented")
+        return Response.Success(emptyList())
     }
 
 }

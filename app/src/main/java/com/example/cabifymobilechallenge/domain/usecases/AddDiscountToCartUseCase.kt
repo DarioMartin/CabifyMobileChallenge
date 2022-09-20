@@ -6,7 +6,7 @@ import com.example.cabifymobilechallenge.domain.repository.IStoreRepository
 
 class AddDiscountToCartUseCase(val repository: IStoreRepository) {
 
-    suspend operator fun invoke(discount: Discount): Response<Boolean> {
+    suspend operator fun invoke(discount: Discount): Response<Unit> {
         val cartDiscounts = repository.getCartDiscounts()
 
         return if (cartDiscounts is Response.Success && cartDiscounts.data?.contains(discount) != true) {
