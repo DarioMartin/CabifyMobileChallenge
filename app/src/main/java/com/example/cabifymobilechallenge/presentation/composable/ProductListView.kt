@@ -79,7 +79,7 @@ fun ProductList(
                     items(products) {
                         ProductListItem(
                             product = it,
-                            currency = viewModel.getCurrency(),
+                            currency = viewModel.currency,
                             onAdd = { viewModel.addProduct(it) },
                             onRemove = { viewModel.removeProduct(it) }
                         )

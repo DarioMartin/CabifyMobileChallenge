@@ -9,10 +9,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class LocalDataSource(private val productDao: ProductDao) : ILocalDataSource {
-    override suspend fun getCartProducts(): Response<Flow<List<Product>>> {
+    override suspend fun getCartProducts(): Response<List<Product>> {
         return try {
-            val products =
-                productDao.getAll().map { products -> products.map { it.toDomainProduct() } }
+            val products = productDao.getAllProducts().map { it.toDomainProduct() }
             Response.Success(data = products)
         } catch (e: Exception) {
             Response.Error("")

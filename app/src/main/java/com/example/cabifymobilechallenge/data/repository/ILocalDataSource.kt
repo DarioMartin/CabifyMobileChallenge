@@ -6,7 +6,7 @@ import com.example.cabifymobilechallenge.domain.model.Product
 import kotlinx.coroutines.flow.Flow
 
 interface ILocalDataSource {
-    suspend fun getCartProducts(): Response<Flow<List<Product>>>
+    suspend fun getCartProducts(): Response<List<Product>>
     suspend fun addProductToCart(product: Product): Response<Unit>
     suspend fun removeProductFromCart(product: Product): Response<Unit>
     suspend fun removeDiscountFromCart(discount: Discount): Response<Unit>

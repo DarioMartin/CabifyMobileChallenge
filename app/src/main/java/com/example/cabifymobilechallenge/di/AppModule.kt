@@ -1,11 +1,6 @@
 package com.example.cabifymobilechallenge.di
 
-import com.example.cabifymobilechallenge.BuildConfig
-import com.example.cabifymobilechallenge.data.local.LocalDataSource
-import com.example.cabifymobilechallenge.data.local.MockedLocalDataSource
-import com.example.cabifymobilechallenge.data.local.dao.ProductDao
-import com.example.cabifymobilechallenge.data.remote.ServerDataSource
-import com.example.cabifymobilechallenge.data.remote.StoreApi
+import android.icu.util.Currency
 import com.example.cabifymobilechallenge.data.repository.ILocalDataSource
 import com.example.cabifymobilechallenge.data.repository.IRemoteDataSource
 import com.example.cabifymobilechallenge.data.repository.StoreRepositoryImpl
@@ -15,29 +10,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
     @Singleton
-    fun providesRemoteDataSource(): IRemoteDataSource {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        return ServerDataSource(retrofit.create(StoreApi::class.java))
-    }
-
     @Provides
-    @Singleton
-    fun providesLocalDataSource(productDao: ProductDao): ILocalDataSource {
-        return LocalDataSource(productDao)
-    }
+    fun provideAppCurrency(): Currency = Currency.getInstance("EUR")
 
     @Provides
     @Singleton

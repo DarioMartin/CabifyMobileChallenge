@@ -73,7 +73,7 @@ private fun Summary(viewModel: CartViewModel = hiltViewModel(), onPlaceOrder: ()
         SumUp(
             stringResource(id = R.string.subtotal),
             viewModel.getSubTotalPrice(),
-            viewModel.getCurrency()
+            viewModel.currency
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -81,12 +81,12 @@ private fun Summary(viewModel: CartViewModel = hiltViewModel(), onPlaceOrder: ()
         SumUp(
             stringResource(id = R.string.discount),
             viewModel.getDiscountAmount(),
-            viewModel.getCurrency()
+            viewModel.currency
         )
 
         Divider(modifier = Modifier.padding(vertical = 18.dp), thickness = 1.dp)
 
-        Total(viewModel.getTotalPrice(), viewModel.getCurrency())
+        Total(viewModel.getTotalPrice(), viewModel.currency)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -110,7 +110,7 @@ private fun LazyListScope.paintProducts(viewModel: CartViewModel) {
                     item {
                         CartProductListItem(
                             product = it,
-                            viewModel.getCurrency()
+                            viewModel.currency
                         )
                     }
                 }

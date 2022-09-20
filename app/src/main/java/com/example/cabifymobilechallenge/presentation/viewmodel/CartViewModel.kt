@@ -14,7 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
+class CartViewModel @Inject constructor(
+    var currency: Currency,
+    private val useCases: CartUseCases
+) :
     ViewModel() {
 
     val uiState: MutableState<CartUIState> = mutableStateOf(CartUIState.Content())
@@ -107,10 +110,6 @@ class CartViewModel @Inject constructor(private val useCases: CartUseCases) :
 
     fun getDiscountAmount(): Double {
         return getSubTotalPrice() - getTotalPrice()
-    }
-
-    fun getCurrency(): Currency {
-        return Currency.getInstance("EUR")
     }
 
     fun getTotalPrice(): Double {

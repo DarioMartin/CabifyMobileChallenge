@@ -29,7 +29,7 @@ class StoreRepositoryImpl(
         return remoteDataSource.makePayment()
     }
 
-    override suspend fun getCartProducts(): Response<Flow<List<Product>>> {
+    override suspend fun getCartProducts(): Response<List<Product>> {
         return localDataSource.getCartProducts()
     }
 

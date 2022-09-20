@@ -17,7 +17,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductListViewModel @Inject constructor(private val useCases: ProductListUseCases) :
+class ProductListViewModel @Inject constructor(
+    var currency: Currency,
+    private val useCases: ProductListUseCases
+) :
     ViewModel() {
 
     val uiState: MutableState<UIState> = mutableStateOf(UIState.Empty)
@@ -61,10 +64,6 @@ class ProductListViewModel @Inject constructor(private val useCases: ProductList
 
             }
         }
-    }
-
-    fun getCurrency(): Currency {
-        return Currency.getInstance("EUR")
     }
 
     private fun updateProduct(product: Product, action: (Product) -> Unit) {
