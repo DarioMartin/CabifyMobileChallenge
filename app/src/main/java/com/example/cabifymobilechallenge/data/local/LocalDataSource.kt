@@ -14,7 +14,7 @@ class LocalDataSource(
 
     override suspend fun getCartProducts(): Response<List<Product>> {
         return try {
-            val products = productDao.getAllProducts().map { it.toDomain() }
+            val products = productDao.getAllProducts().mapNotNull { it.toDomain() }
             Response.Success(data = products)
         } catch (e: Exception) {
             Response.Error("Error trying to recover products from database")
@@ -68,7 +68,7 @@ class LocalDataSource(
 
     override suspend fun getCartDiscounts(): Response<List<Discount>> {
         return try {
-            val discounts = discountDao.getDiscounts().map { it.toDomain() }
+            val discounts = discountDao.getDiscounts().mapNotNull { it.toDomain() }
             Response.Success(data = discounts)
         } catch (e: Exception) {
             Response.Error("Error trying to recover discounts from database")
