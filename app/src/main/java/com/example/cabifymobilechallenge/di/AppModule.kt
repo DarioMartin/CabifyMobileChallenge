@@ -57,4 +57,8 @@ object AppModule {
             getCartUseCase = GetCartUseCase(repository)
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideProcessOrderUseCase(repository: IStoreRepository) = ProcessOrderUseCase(repository)
 }

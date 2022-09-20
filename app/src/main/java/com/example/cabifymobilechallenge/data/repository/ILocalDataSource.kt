@@ -14,4 +14,7 @@ interface ILocalDataSource {
     suspend fun updateDiscount(discount: Discount): Response<Unit>
     suspend fun getCartDiscounts(): Response<List<Discount>>
     suspend fun getProductCount(product: Product): Response<Int>
+    suspend fun clearDiscounts(): Response<Unit>
+    suspend fun clearProducts(): Response<Unit>
+
 }

@@ -48,7 +48,6 @@ class LocalDataSource(
         }
     }
 
-
     override suspend fun removeDiscount(discount: Discount): Response<Unit> {
         return try {
             discountDao.delete(discount.toEntity())
@@ -82,6 +81,24 @@ class LocalDataSource(
             Response.Success(Unit)
         } catch (e: Exception) {
             Response.Error("Error trying to update discount in database")
+        }
+    }
+
+    override suspend fun clearDiscounts(): Response<Unit> {
+        return try {
+            discountDao.clearAll()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            Response.Error("We could not perform the action")
+        }
+    }
+
+    override suspend fun clearProducts(): Response<Unit> {
+        return try {
+            productDao.clearAll()
+            Response.Success(Unit)
+        } catch (e: Exception) {
+            Response.Error("We could not perform the action")
         }
     }
 

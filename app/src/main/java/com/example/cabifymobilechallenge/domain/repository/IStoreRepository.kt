@@ -22,4 +22,7 @@ interface IStoreRepository {
     suspend fun makePayment(shoppingCart: ShoppingCart): Response<Unit>
     suspend fun addDiscountsToCart(discounts: List<Discount>): Response<Unit>
 
+    suspend fun clearProducts(): Response<Unit>
+    suspend fun clearDiscounts(): Response<Unit>
+
 }

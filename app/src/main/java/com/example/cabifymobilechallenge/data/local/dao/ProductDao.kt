@@ -23,4 +23,6 @@ interface ProductDao {
     @Query("SELECT COUNT(*) FROM product_table WHERE type = :type")
     suspend fun countProductsByType(type: String): Int
 
+    @Query("DELETE FROM product_table")
+    suspend fun clearAll()
 }

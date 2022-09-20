@@ -56,4 +56,13 @@ class StoreRepositoryImpl(
         return localDataSource.addDiscounts(discounts)
     }
 
+    override suspend fun clearProducts(): Response<Unit> {
+        return localDataSource.clearProducts()
+    }
+
+    override suspend fun clearDiscounts(): Response<Unit> {
+        return localDataSource.clearDiscounts()
+    }
+
+
 }

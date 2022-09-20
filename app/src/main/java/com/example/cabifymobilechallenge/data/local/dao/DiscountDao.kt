@@ -20,4 +20,7 @@ interface DiscountDao {
     @Update
     suspend fun update(discount: DiscountEntity)
 
+    @Query("DELETE FROM discount_table")
+    suspend fun clearAll()
+
 }

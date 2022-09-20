@@ -57,7 +57,11 @@ class MainActivity : ComponentActivity() {
 
                             composable(CHECKOUT) {
                                 CheckoutView {
-                                    navController.navigate(ORDER)
+                                    navController.navigate(ORDER) {
+                                        popUpTo(PRODUCT_LIST) {
+                                            inclusive = true
+                                        }
+                                    }
                                 }
                             }
 
@@ -81,7 +85,7 @@ class MainActivity : ComponentActivity() {
         TopAppBar(
             title = { Text(text = stringResource(id = R.string.app_name)) },
             navigationIcon = {
-                if (navBackStackEntry?.destination?.route != PRODUCT_LIST) {
+                if (navBackStackEntry?.destination?.route == CHECKOUT) {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
