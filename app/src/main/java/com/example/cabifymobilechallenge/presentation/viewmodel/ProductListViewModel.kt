@@ -10,9 +10,8 @@ import com.example.cabifymobilechallenge.data.Response
 import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.domain.usecases.ProductListUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,25 +23,21 @@ class ProductListViewModel @Inject constructor(
     ViewModel() {
 
     val uiState: MutableState<UIState> = mutableStateOf(UIState.Empty)
-    var products = mutableStateListOf<Product>()
+    val products = mutableStateListOf<Product>()
 
-    private var _updateErrorFlow = MutableSharedFlow<Unit>()
-    var updateErrorFlow: SharedFlow<Unit> = _updateErrorFlow.asSharedFlow()
+    private var _errorEvents = Channel<Unit>()
+    var errorEvents = _errorEvents.receiveAsFlow()
 
     init {
         loadProducts()
     }
 
-    private fun loadProducts() {
+    fun loadProducts() {
         uiState.value = UIState.Loading
         viewModelScope.launch {
-            uiState.value = when (val result = useCases.getProductsUseCase()) {
-                is Response.Error -> UIState.Error
-                is Response.Success -> {
-                    products.clear()
-                    products.addAll(result.data ?: emptyList())
-                    UIState.Success
-                }
+            when (val result = useCases.getProductsUseCase()) {
+                is Response.Error -> uiState.value = UIState.Error
+                is Response.Success -> updateProducts(result.data)
             }
         }
     }
@@ -50,7 +45,7 @@ class ProductListViewModel @Inject constructor(
     fun addProduct(product: Product) {
         viewModelScope.launch {
             when (useCases.addProductToCartUseCase(product)) {
-                is Response.Error -> _updateErrorFlow.emit(Unit)
+                is Response.Error -> _errorEvents.send(Unit)
                 is Response.Success -> updateProduct(product) { it.increment() }
             }
         }
@@ -59,23 +54,35 @@ class ProductListViewModel @Inject constructor(
     fun removeProduct(product: Product) {
         viewModelScope.launch {
             when (useCases.removeProductsFromCartUseCase(product)) {
-                is Response.Error -> _updateErrorFlow.emit(Unit)
+                is Response.Error -> _errorEvents.send(Unit)
                 is Response.Success -> updateProduct(product) { it.decrement() }
-
             }
         }
     }
 
     private fun updateProduct(product: Product, action: (Product) -> Unit) {
-        val index = products.indexOfFirst { it.javaClass == product.javaClass }
-        if (index >= 0) {
-            val p: Product = products[index]
-            products.remove(p)
-            action(p)
-            products.add(index, p)
+        products.firstOrNull { it == product }?.let {
+            val index = products.indexOf(it)
+            products.remove(it)
+            action(it)
+            products.add(index, it)
         }
     }
 
+    fun clearCart() {
+        viewModelScope.launch {
+            when (val result = useCases.clearCartUseCase()) {
+                is Response.Error -> _errorEvents.send(Unit)
+                is Response.Success -> updateProducts(result.data)
+            }
+        }
+    }
+
+    private fun updateProducts(newProducts: List<Product>?) {
+        products.clear()
+        products.addAll(newProducts ?: emptyList())
+        uiState.value = if (products.isEmpty()) UIState.Empty else UIState.Success
+    }
 }
 
 

@@ -1,10 +1,8 @@
 package com.example.cabifymobilechallenge.presentation.viewmodel
 
 import android.icu.util.Currency
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cabifymobilechallenge.data.Response
@@ -12,9 +10,8 @@ import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.domain.usecases.CartUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,20 +19,17 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     var currency: Currency,
     private val useCases: CartUseCases
-) :
-    ViewModel() {
+) : ViewModel() {
 
-    var uiState by mutableStateOf<CartUIState>(CartUIState.Loading)
-        private set
+    val uiState = mutableStateOf<CartUIState>(CartUIState.Loading)
+    val products = mutableStateListOf<Product>()
+    val discounts = mutableStateListOf<Discount>()
 
-    var products = mutableStateListOf<Product>()
-    var discounts = mutableStateListOf<Discount>()
-
-    private var _updateErrorFlow = MutableSharedFlow<Unit>()
-    var updateErrorFlow: SharedFlow<Unit> = _updateErrorFlow.asSharedFlow()
+    private var _errorEvents = Channel<Unit>()
+    var errorEvents = _errorEvents.receiveAsFlow()
 
     init {
-        this.uiState = CartUIState.Loading
+        uiState.value = CartUIState.Loading
 
         loadAvailableDiscounts()
         loadCartProducts()
@@ -43,7 +37,7 @@ class CartViewModel @Inject constructor(
 
     private fun loadCartProducts() {
         viewModelScope.launch {
-            uiState =
+            uiState.value =
                 when (val result = useCases.getCartProductsUseCase()) {
                     is Response.Error -> CartUIState.Error
                     is Response.Success -> {
@@ -57,7 +51,7 @@ class CartViewModel @Inject constructor(
 
     private fun loadAvailableDiscounts() {
         viewModelScope.launch {
-            uiState = when (val result = useCases.getAvailableDiscountsUseCase()) {
+            uiState.value = when (val result = useCases.getAvailableDiscountsUseCase()) {
                 is Response.Error -> CartUIState.Error
                 is Response.Success -> {
                     discounts.clear()
@@ -71,10 +65,8 @@ class CartViewModel @Inject constructor(
     fun addDiscount(discount: Discount) {
         viewModelScope.launch {
             when (useCases.activateDiscountUseCase(discount)) {
-                is Response.Error -> _updateErrorFlow.emit(Unit)
-                is Response.Success -> {
-                    updateDiscount(discount) { it.active = true }
-                }
+                is Response.Error -> _errorEvents.send(Unit)
+                is Response.Success -> updateDiscount(discount) { it.active = true }
             }
         }
     }
@@ -82,21 +74,18 @@ class CartViewModel @Inject constructor(
     fun removeDiscount(discount: Discount) {
         viewModelScope.launch {
             when (useCases.deactivateDiscountUseCase(discount)) {
-                is Response.Error -> _updateErrorFlow.emit(Unit)
-                is Response.Success -> {
-                    updateDiscount(discount) { it.active = false }
-                }
+                is Response.Error -> _errorEvents.send(Unit)
+                is Response.Success -> updateDiscount(discount) { it.active = false }
             }
         }
     }
 
     private fun updateDiscount(discount: Discount, action: (Discount) -> Unit) {
-        val index = discounts.indexOfFirst { it.javaClass == discount.javaClass }
-        if (index >= 0) {
-            val d = discounts[index]
-            discounts.remove(d)
-            action(d)
-            this.discounts.add(index, d)
+        discounts.firstOrNull { it == discount }?.let {
+            val index = discounts.indexOf(it)
+            discounts.remove(it)
+            action(it)
+            discounts.add(index, it)
         }
     }
 

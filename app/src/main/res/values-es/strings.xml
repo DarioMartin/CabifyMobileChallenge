@@ -26,4 +26,5 @@
     <string name="order_success_title">Pedido completado</string>
     <string name="order_success_body">Su pedido se ha completado con éxito</string>
     <string name="buy_again">Comprar de nuevo</string>
+    <string name="clear_cart">Limpiar cesta</string>
 </resources>

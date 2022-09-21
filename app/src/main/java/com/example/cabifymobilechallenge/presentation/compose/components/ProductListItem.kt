@@ -1,4 +1,4 @@
-package com.example.cabifymobilechallenge.presentation.composable
+package com.example.cabifymobilechallenge.presentation.compose.components
 
 import android.icu.util.Currency
 import androidx.compose.foundation.border

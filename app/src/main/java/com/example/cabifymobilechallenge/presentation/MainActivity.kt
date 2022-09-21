@@ -18,9 +18,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.cabifymobilechallenge.R
-import com.example.cabifymobilechallenge.presentation.composable.CheckoutView
-import com.example.cabifymobilechallenge.presentation.composable.OrderView
-import com.example.cabifymobilechallenge.presentation.composable.ProductListView
+import com.example.cabifymobilechallenge.presentation.compose.views.CheckoutView
+import com.example.cabifymobilechallenge.presentation.compose.views.OrderView
+import com.example.cabifymobilechallenge.presentation.compose.views.ProductListView
 import com.example.cabifymobilechallenge.presentation.theme.CabifyMobileChallengeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -58,9 +58,7 @@ class MainActivity : ComponentActivity() {
                             composable(CHECKOUT) {
                                 CheckoutView {
                                     navController.navigate(ORDER) {
-                                        popUpTo(PRODUCT_LIST) {
-                                            inclusive = true
-                                        }
+                                        popUpTo(PRODUCT_LIST)
                                     }
                                 }
                             }

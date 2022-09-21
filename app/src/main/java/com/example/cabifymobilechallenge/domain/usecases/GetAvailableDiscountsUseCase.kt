@@ -3,16 +3,15 @@ package com.example.cabifymobilechallenge.domain.usecases
 import com.example.cabifymobilechallenge.data.Response
 import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.repository.IStoreRepository
-import kotlinx.coroutines.flow.Flow
 
 class GetAvailableDiscountsUseCase(val repository: IStoreRepository) {
 
     suspend operator fun invoke(): Response<List<Discount>> {
-        val discounts = repository.getAvailableDiscounts()
+        val response = repository.getAvailableDiscounts()
+        if (response is Response.Error) return response
 
-        if (discounts is Response.Success) {
-            repository.addDiscountsToCart(discounts.data ?: emptyList())
-        }
+        val discounts = response.data ?: emptyList()
+        repository.addDiscountsToCart(discounts)
 
         return repository.getCartDiscounts()
     }

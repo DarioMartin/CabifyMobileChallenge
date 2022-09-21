@@ -41,7 +41,8 @@ object AppModule {
         return ProductListUseCases(
             getProductsUseCase = GetProductsUseCase(repository),
             addProductToCartUseCase = AddProductToCartUseCase(repository),
-            removeProductsFromCartUseCase = RemoveProductFromCartUseCase(repository)
+            removeProductsFromCartUseCase = RemoveProductFromCartUseCase(repository),
+            clearCartUseCase = ClearCartUseCase(repository)
         )
     }
 
