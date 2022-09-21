@@ -1,4 +1,4 @@
-package com.example.cabifymobilechallenge.presentation.composable
+package com.example.cabifymobilechallenge.presentation.compose.views
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -15,11 +15,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cabifymobilechallenge.R
+import com.example.cabifymobilechallenge.presentation.compose.components.Message
+import com.example.cabifymobilechallenge.presentation.compose.components.ProductListItem
+import com.example.cabifymobilechallenge.presentation.compose.components.ProgressIndicator
+import com.example.cabifymobilechallenge.presentation.compose.components.Shadow
 import com.example.cabifymobilechallenge.presentation.viewmodel.ProductListViewModel
 import com.example.cabifymobilechallenge.presentation.viewmodel.UIState
 
 @Composable
 fun ProductListView(viewModel: ProductListViewModel = hiltViewModel(), onCheckOut: () -> Unit) {
+
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.errorEvents.collect {
+            Toast.makeText(
+                context,
+                context.getString(R.string.error_updating_quantity),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
 
     when (viewModel.uiState.value) {
         is UIState.Success -> ProductList(
@@ -42,18 +57,7 @@ fun ProductList(
     viewModel: ProductListViewModel = hiltViewModel(),
     onCheckOut: () -> Unit
 ) {
-    val context = LocalContext.current
     val products = viewModel.products
-
-    LaunchedEffect(Unit) {
-        viewModel.updateErrorFlow.collect {
-            Toast.makeText(
-                context,
-                context.getString(R.string.error_updating_quantity),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
 
     Column(
         modifier = Modifier.fillMaxSize(),

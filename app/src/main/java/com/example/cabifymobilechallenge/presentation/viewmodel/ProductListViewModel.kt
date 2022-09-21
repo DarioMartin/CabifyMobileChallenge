@@ -10,9 +10,11 @@ import com.example.cabifymobilechallenge.data.Response
 import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.domain.usecases.ProductListUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,10 +26,10 @@ class ProductListViewModel @Inject constructor(
     ViewModel() {
 
     val uiState: MutableState<UIState> = mutableStateOf(UIState.Empty)
-    var products = mutableStateListOf<Product>()
+    val products = mutableStateListOf<Product>()
 
-    private var _updateErrorFlow = MutableSharedFlow<Unit>()
-    var updateErrorFlow: SharedFlow<Unit> = _updateErrorFlow.asSharedFlow()
+    private var _errorEvents = Channel<Unit>()
+    var errorEvents = _errorEvents.receiveAsFlow()
 
     init {
         loadProducts()
@@ -50,7 +52,7 @@ class ProductListViewModel @Inject constructor(
     fun addProduct(product: Product) {
         viewModelScope.launch {
             when (useCases.addProductToCartUseCase(product)) {
-                is Response.Error -> _updateErrorFlow.emit(Unit)
+                is Response.Error -> _errorEvents.send(Unit)
                 is Response.Success -> updateProduct(product) { it.increment() }
             }
         }
@@ -59,9 +61,8 @@ class ProductListViewModel @Inject constructor(
     fun removeProduct(product: Product) {
         viewModelScope.launch {
             when (useCases.removeProductsFromCartUseCase(product)) {
-                is Response.Error -> _updateErrorFlow.emit(Unit)
+                is Response.Error -> _errorEvents.send(Unit)
                 is Response.Success -> updateProduct(product) { it.decrement() }
-
             }
         }
     }
@@ -75,7 +76,6 @@ class ProductListViewModel @Inject constructor(
             products.add(index, p)
         }
     }
-
 }
 
 

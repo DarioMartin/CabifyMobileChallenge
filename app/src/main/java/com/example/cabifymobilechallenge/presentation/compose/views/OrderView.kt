@@ -1,9 +1,11 @@
-package com.example.cabifymobilechallenge.presentation.composable
+package com.example.cabifymobilechallenge.presentation.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cabifymobilechallenge.R
+import com.example.cabifymobilechallenge.presentation.compose.components.Message
+import com.example.cabifymobilechallenge.presentation.compose.components.ProgressIndicator
 import com.example.cabifymobilechallenge.presentation.viewmodel.OrderUIState
 import com.example.cabifymobilechallenge.presentation.viewmodel.OrderViewModel
 

@@ -1,4 +1,4 @@
-package com.example.cabifymobilechallenge.presentation.composable
+package com.example.cabifymobilechallenge.presentation.compose.components
 
 import androidx.annotation.DrawableRes
 import com.example.cabifymobilechallenge.R

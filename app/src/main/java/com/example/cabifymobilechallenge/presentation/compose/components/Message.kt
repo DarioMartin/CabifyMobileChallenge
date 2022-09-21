@@ -1,4 +1,4 @@
-package com.example.cabifymobilechallenge.presentation.composable
+package com.example.cabifymobilechallenge.presentation.compose.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme

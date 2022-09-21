@@ -1,4 +1,4 @@
-package com.example.cabifymobilechallenge.presentation.composable
+package com.example.cabifymobilechallenge.presentation.compose.views
 
 import android.icu.util.Currency
 import android.widget.Toast
@@ -20,6 +20,8 @@ import com.example.cabifymobilechallenge.R
 import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.domain.model.ShoppingCart
+import com.example.cabifymobilechallenge.presentation.compose.components.ProgressIndicator
+import com.example.cabifymobilechallenge.presentation.compose.components.Shadow
 import com.example.cabifymobilechallenge.presentation.formatAsCurrency
 import com.example.cabifymobilechallenge.presentation.getDiscountName
 import com.example.cabifymobilechallenge.presentation.viewmodel.CartUIState
