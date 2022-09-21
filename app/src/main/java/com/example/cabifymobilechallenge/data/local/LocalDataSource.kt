@@ -25,7 +25,6 @@ class LocalDataSource(
         return try {
             productDao.insertAll(listOf(product.toEntity()))
             Response.Success(Unit)
-            Response.Error("Error trying to recover products from database")
         } catch (e: Exception) {
             Response.Error("Error trying to add product to database")
         }

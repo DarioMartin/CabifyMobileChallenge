@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -57,7 +59,6 @@ fun ProductList(
     viewModel: ProductListViewModel = hiltViewModel(),
     onCheckOut: () -> Unit
 ) {
-    val products = viewModel.products
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -79,14 +80,25 @@ fun ProductList(
                     bottom = 16.dp
                 ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
                 content = {
-                    items(products) {
+                    items(viewModel.products) {
                         ProductListItem(
                             product = it,
                             currency = viewModel.currency,
                             onAdd = { viewModel.addProduct(it) },
                             onRemove = { viewModel.removeProduct(it) }
                         )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(48.dp))
+                        OutlinedButton(
+                            onClick = { viewModel.clearCart() },
+                            enabled = viewModel.products.any { it.count > 0 }
+                        ) {
+                            Text(text = stringResource(R.string.clear_cart))
+                        }
                     }
                 }
             )
@@ -102,7 +114,7 @@ fun ProductList(
         Column(modifier = Modifier.padding(18.dp)) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                enabled = products.any { it.count > 0 },
+                enabled = viewModel.products.any { it.count > 0 },
                 onClick = { onCheckOut() }) {
                 Text(text = stringResource(R.string.proceed_to_checkout))
             }
