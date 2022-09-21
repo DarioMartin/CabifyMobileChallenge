@@ -58,9 +58,7 @@ class MainActivity : ComponentActivity() {
                             composable(CHECKOUT) {
                                 CheckoutView {
                                     navController.navigate(ORDER) {
-                                        popUpTo(PRODUCT_LIST) {
-                                            inclusive = true
-                                        }
+                                        popUpTo(PRODUCT_LIST)
                                     }
                                 }
                             }

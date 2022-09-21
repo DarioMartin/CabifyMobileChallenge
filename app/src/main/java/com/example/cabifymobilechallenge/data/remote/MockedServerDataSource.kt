@@ -5,6 +5,7 @@ import com.example.cabifymobilechallenge.data.repository.IRemoteDataSource
 import com.example.cabifymobilechallenge.data.toDomainProduct
 import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
+import com.example.cabifymobilechallenge.domain.model.ShoppingCart
 import java.lang.Exception
 
 class MockedServerDataSource() : IRemoteDataSource {
@@ -19,10 +20,6 @@ class MockedServerDataSource() : IRemoteDataSource {
         )
     }
 
-    override suspend fun makePayment(): Response<Unit> {
-        return Response.Success(Unit)
-    }
-
     override suspend fun getAvailableDiscounts(): Response<List<Discount>> {
         return Response.Success(
             listOf(
@@ -30,5 +27,9 @@ class MockedServerDataSource() : IRemoteDataSource {
                 Discount.TShirtBulkPromo
             )
         )
+    }
+
+    override suspend fun makeOrder(shoppingCart: ShoppingCart): Response<Unit> {
+        return Response.Success(Unit)
     }
 }

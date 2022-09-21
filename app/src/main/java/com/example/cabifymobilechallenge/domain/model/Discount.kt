@@ -6,10 +6,9 @@ sealed class Discount(var active: Boolean = false) : DiscountCalculator {
         override fun calculateDiscount(products: List<Product>): Double {
             val group = 2
             val free = 1
-
-            val freeItems: Int = products.filterIsInstance<Product.Voucher>().size / group * free
-
-            return products.take(freeItems).sumOf { it.price }
+            val vouchers = products.filterIsInstance<Product.Voucher>()
+            val freeItems: Int = vouchers.size / group * free
+            return vouchers.take(freeItems).sumOf { it.price }
         }
     }
 

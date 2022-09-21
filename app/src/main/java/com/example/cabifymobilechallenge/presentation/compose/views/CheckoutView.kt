@@ -28,13 +28,12 @@ import com.example.cabifymobilechallenge.presentation.viewmodel.CartUIState
 import com.example.cabifymobilechallenge.presentation.viewmodel.CartViewModel
 
 @Composable
-fun CheckoutView(onPlaceOrder: () -> Unit) {
+fun CheckoutView(viewModel: CartViewModel = hiltViewModel(), onPlaceOrder: () -> Unit) {
 
     val context = LocalContext.current
-    val viewModel: CartViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        viewModel.updateErrorFlow.collect {
+        viewModel.errorEvents.collect {
             Toast.makeText(
                 context,
                 context.getString(R.string.error_updating_quantity),
@@ -128,7 +127,7 @@ private fun Summary(
 }
 
 private fun LazyListScope.paintProducts(viewModel: CartViewModel) {
-    when (viewModel.uiState) {
+    when (viewModel.uiState.value) {
         CartUIState.Loading -> item { ProgressIndicator() }
         is CartUIState.Error -> item { Text(text = stringResource(R.string.error_get_products)) }
         is CartUIState.Success -> {
@@ -147,7 +146,7 @@ private fun LazyListScope.paintProducts(viewModel: CartViewModel) {
 }
 
 private fun LazyListScope.paintDiscounts(viewModel: CartViewModel) {
-    when (viewModel.uiState) {
+    when (viewModel.uiState.value) {
         CartUIState.Loading -> item { ProgressIndicator() }
         is CartUIState.Error -> item { Text(text = stringResource(R.string.error_get_discounts)) }
         is CartUIState.Success -> {

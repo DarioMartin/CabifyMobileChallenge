@@ -32,7 +32,7 @@ class ProductListViewModel @Inject constructor(
         loadProducts()
     }
 
-    private fun loadProducts() {
+    fun loadProducts() {
         uiState.value = UIState.Loading
         viewModelScope.launch {
             when (val result = useCases.getProductsUseCase()) {

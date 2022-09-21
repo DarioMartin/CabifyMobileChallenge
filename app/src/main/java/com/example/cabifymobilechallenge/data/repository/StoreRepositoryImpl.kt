@@ -24,10 +24,6 @@ class StoreRepositoryImpl(
         return localDataSource.removeProductFromCart(product)
     }
 
-    override suspend fun makePayment(shoppingCart: ShoppingCart): Response<Unit> {
-        return remoteDataSource.makePayment()
-    }
-
     override suspend fun getCartProducts(): Response<List<Product>> {
         return localDataSource.getCartProducts()
     }
@@ -62,6 +58,10 @@ class StoreRepositoryImpl(
 
     override suspend fun clearDiscounts(): Response<Unit> {
         return localDataSource.clearDiscounts()
+    }
+
+    override suspend fun makeOrder(shoppingCart: ShoppingCart): Response<Unit> {
+        return remoteDataSource.makeOrder(shoppingCart)
     }
 
 

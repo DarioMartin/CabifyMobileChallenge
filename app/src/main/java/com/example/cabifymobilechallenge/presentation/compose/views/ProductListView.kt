@@ -43,11 +43,15 @@ fun ProductListView(viewModel: ProductListViewModel = hiltViewModel(), onCheckOu
             onCheckOut = { onCheckOut() })
         UIState.Error -> Message(
             title = stringResource(R.string.product_list_error_title),
-            body = stringResource(R.string.product_list_error_body)
+            body = stringResource(R.string.product_list_error_body),
+            action = { viewModel.loadProducts() },
+            actionName = stringResource(id = R.string.try_again)
         )
         UIState.Empty -> Message(
             title = stringResource(R.string.product_empty_list_title),
-            body = stringResource(R.string.product_empty_list_body)
+            body = stringResource(R.string.product_empty_list_body),
+            action = { viewModel.loadProducts() },
+            actionName = stringResource(id = R.string.try_again)
         )
         UIState.Loading -> ProgressIndicator()
     }
