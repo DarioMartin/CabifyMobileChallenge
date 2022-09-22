@@ -8,6 +8,7 @@ class ClearCartUseCase(private val repository: IStoreRepository) {
 
     suspend operator fun invoke(): Response<List<Product>> {
         repository.clearProducts()
+        repository.clearDiscounts()
         return repository.getAvailableProducts()
     }
 

@@ -36,12 +36,8 @@ class StoreRepositoryImpl(
         return localDataSource.getCartDiscounts()
     }
 
-    override suspend fun activateDiscount(discount: Discount): Response<Unit> {
-        return localDataSource.updateDiscount(discount.apply { active = true })
-    }
-
-    override suspend fun deactivateDiscount(discount: Discount): Response<Unit> {
-        return localDataSource.updateDiscount(discount.apply { active = false })
+    override suspend fun updateDiscount(discount: Discount): Response<Unit> {
+        return localDataSource.updateDiscount(discount)
     }
 
     override suspend fun getProductCount(product: Product): Response<Int> {
@@ -63,6 +59,5 @@ class StoreRepositoryImpl(
     override suspend fun makeOrder(shoppingCart: ShoppingCart): Response<Unit> {
         return remoteDataSource.makeOrder(shoppingCart)
     }
-
 
 }

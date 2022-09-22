@@ -35,7 +35,7 @@ class ProductListViewModel @Inject constructor(
     fun loadProducts() {
         uiState.value = UIState.Loading
         viewModelScope.launch {
-            when (val result = useCases.getProductsUseCase()) {
+            when (val result = useCases.getAvailableProductsUseCase()) {
                 is Response.Error -> uiState.value = UIState.Error
                 is Response.Success -> updateProducts(result.data)
             }

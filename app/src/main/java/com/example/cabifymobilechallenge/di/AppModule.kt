@@ -31,15 +31,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesGetProductsUseCase(repository: IStoreRepository): GetProductsUseCase {
-        return GetProductsUseCase(repository)
+    fun providesGetProductsUseCase(repository: IStoreRepository): GetAvailableProductsUseCase {
+        return GetAvailableProductsUseCase(repository)
     }
 
     @Provides
     @Singleton
     fun providesProductListUseCases(repository: IStoreRepository): ProductListUseCases {
         return ProductListUseCases(
-            getProductsUseCase = GetProductsUseCase(repository),
+            getAvailableProductsUseCase = GetAvailableProductsUseCase(repository),
             addProductToCartUseCase = AddProductToCartUseCase(repository),
             removeProductsFromCartUseCase = RemoveProductFromCartUseCase(repository),
             clearCartUseCase = ClearCartUseCase(repository)
@@ -54,8 +54,7 @@ object AppModule {
             getAvailableDiscountsUseCase = GetAvailableDiscountsUseCase(repository),
             activateDiscountUseCase = ActivateDiscountUseCase(repository),
             deactivateDiscountUseCase = DeactivateDiscountUseCase(repository),
-            getCartDiscountsUseCase = GetCartDiscountsUseCase(repository),
-            getCartUseCase = GetCartUseCase(repository)
+            getCartDiscountsUseCase = GetCartDiscountsUseCase(repository)
         )
     }
 
