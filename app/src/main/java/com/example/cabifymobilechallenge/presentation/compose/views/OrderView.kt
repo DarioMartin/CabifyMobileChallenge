@@ -14,7 +14,7 @@ fun OrderView(onBuyAgain: () -> Unit) {
 
     val viewModel: OrderViewModel = hiltViewModel()
 
-    when (viewModel.uiState) {
+    when (viewModel.uiState.value) {
         OrderUIState.Error -> Message(
             title = stringResource(R.string.order_error_title),
             body = stringResource(R.string.order_error_body),

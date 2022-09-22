@@ -3,7 +3,7 @@ package com.example.cabifymobilechallenge.domain.model
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-internal class ProductEntityTest {
+internal class ShoppingCartTest {
 
     //https://github.com/cabify/MobileChallenge
 
@@ -18,35 +18,51 @@ internal class ProductEntityTest {
         )
 
     @Test
+    fun `Test empty cart total`() {
+        val shoppingCart = ShoppingCart()
+        assertThat(shoppingCart.total()).isEqualTo(0)
+    }
+
+    @Test
+    fun `Test empty cart with discounts total`() {
+        val shoppingCart = ShoppingCart(discounts = discounts)
+        assertThat(shoppingCart.total()).isEqualTo(0)
+    }
+
+    @Test
     fun `First test case`() {
         val products = listOf(voucher, tShirt, mug)
         val shoppingCart = ShoppingCart(products, discounts)
-        val total = shoppingCart.total()
-        assertThat(total).isEqualTo(32.50)
+
+        assertThat(shoppingCart.subTotal()).isEqualTo(32.50)
+        assertThat(shoppingCart.total()).isEqualTo(32.50)
     }
 
     @Test
     fun `Second test case`() {
         val products = listOf(voucher, tShirt, voucher)
         val shoppingCart = ShoppingCart(products, discounts)
-        val total = shoppingCart.total()
-        assertThat(total).isEqualTo(25.00)
+
+        assertThat(shoppingCart.subTotal()).isEqualTo(30.00)
+        assertThat(shoppingCart.total()).isEqualTo(25.00)
     }
 
     @Test
     fun `Third test case`() {
         val products = listOf(tShirt, tShirt, tShirt, voucher, tShirt)
         val shoppingCart = ShoppingCart(products, discounts)
-        val total = shoppingCart.total()
-        assertThat(total).isEqualTo(81.00)
+
+        assertThat(shoppingCart.subTotal()).isEqualTo(85.00)
+        assertThat(shoppingCart.total()).isEqualTo(81.00)
     }
 
     @Test
     fun `Fourth test case`() {
         val products = listOf(voucher, tShirt, voucher, voucher, mug, tShirt, tShirt)
         val shoppingCart = ShoppingCart(products, discounts)
-        val total = shoppingCart.total()
-        assertThat(total).isEqualTo(74.50)
+
+        assertThat(shoppingCart.subTotal()).isEqualTo(82.5)
+        assertThat(shoppingCart.total()).isEqualTo(74.50)
     }
 
 }

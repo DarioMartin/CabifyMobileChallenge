@@ -5,6 +5,5 @@ data class CartUseCases(
     val getAvailableDiscountsUseCase: GetAvailableDiscountsUseCase,
     val activateDiscountUseCase: ActivateDiscountUseCase,
     val deactivateDiscountUseCase: DeactivateDiscountUseCase,
-    val getCartDiscountsUseCase: GetCartDiscountsUseCase,
-    val getCartUseCase: GetCartUseCase
+    val getCartDiscountsUseCase: GetCartDiscountsUseCase
 )

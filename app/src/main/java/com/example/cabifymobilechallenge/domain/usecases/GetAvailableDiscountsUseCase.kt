@@ -11,6 +11,7 @@ class GetAvailableDiscountsUseCase(val repository: IStoreRepository) {
         if (response is Response.Error) return response
 
         val discounts = response.data ?: emptyList()
+        repository.clearDiscounts()
         repository.addDiscountsToCart(discounts)
 
         return repository.getCartDiscounts()

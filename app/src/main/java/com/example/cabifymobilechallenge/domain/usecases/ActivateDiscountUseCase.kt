@@ -7,7 +7,7 @@ import com.example.cabifymobilechallenge.domain.repository.IStoreRepository
 class ActivateDiscountUseCase(val repository: IStoreRepository) {
 
     suspend operator fun invoke(discount: Discount): Response<Unit> {
-        return repository.activateDiscount(discount)
+        return repository.updateDiscount(discount.apply { active = true })
     }
 
 }
