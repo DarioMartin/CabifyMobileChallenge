@@ -1,6 +1,5 @@
 package com.example.cabifymobilechallenge.domain.usecases
 
-import com.example.cabifymobilechallenge.data.Response
 import com.google.common.truth.Truth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

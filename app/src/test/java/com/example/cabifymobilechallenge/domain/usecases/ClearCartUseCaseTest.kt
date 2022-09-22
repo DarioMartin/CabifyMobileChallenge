@@ -5,7 +5,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import java.util.stream.Collectors.toList
 
 @ExperimentalCoroutinesApi
 internal class ClearCartUseCaseTest : UseCaseTest() {

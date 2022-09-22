@@ -1,12 +1,11 @@
 package com.example.cabifymobilechallenge.presentation.viewmodel
 
-import android.icu.util.Currency
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.cabifymobilechallenge.MainCoroutineRule
 import com.example.cabifymobilechallenge.data.local.MockedLocalDataSource
 import com.example.cabifymobilechallenge.data.remote.MockedServerDataSource
 import com.example.cabifymobilechallenge.data.repository.StoreRepositoryImpl
-import com.example.cabifymobilechallenge.domain.usecases.*
+import com.example.cabifymobilechallenge.domain.usecases.ProcessOrderUseCase
 import com.google.common.truth.Truth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
