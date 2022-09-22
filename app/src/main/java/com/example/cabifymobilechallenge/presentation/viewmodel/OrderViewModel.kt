@@ -1,8 +1,6 @@
 package com.example.cabifymobilechallenge.presentation.viewmodel
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cabifymobilechallenge.data.Response
@@ -15,7 +13,7 @@ import javax.inject.Inject
 class OrderViewModel @Inject constructor(val processOrderUseCase: ProcessOrderUseCase) :
     ViewModel() {
 
-    var uiState by mutableStateOf<OrderUIState>(OrderUIState.Loading)
+    var uiState = mutableStateOf<OrderUIState>(OrderUIState.Loading)
         private set
 
 
@@ -25,7 +23,7 @@ class OrderViewModel @Inject constructor(val processOrderUseCase: ProcessOrderUs
 
     fun processOrder() {
         viewModelScope.launch {
-            uiState = when (processOrderUseCase()) {
+            uiState.value = when (processOrderUseCase()) {
                 is Response.Error -> OrderUIState.Error
                 is Response.Success -> OrderUIState.Success
             }
