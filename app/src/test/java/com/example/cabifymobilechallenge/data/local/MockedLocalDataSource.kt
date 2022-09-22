@@ -6,12 +6,12 @@ import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
 
 internal class MockedLocalDataSource(
-    val products: MutableList<Product> = mutableListOf(
+    private val products: MutableList<Product> = mutableListOf(
         Product.Voucher("Voucher", 5.0),
         Product.TShirt("Tshirt", 20.0),
         Product.Mug("Mug", 7.5)
     ),
-    var discounts: MutableList<Discount> = mutableListOf(
+    private var discounts: MutableList<Discount> = mutableListOf(
         Discount.TwoPer1VoucherPromo,
         Discount.TShirtBulkPromo
     ),
@@ -19,7 +19,7 @@ internal class MockedLocalDataSource(
 ) :
     ILocalDataSource {
     override suspend fun getCartProducts(): Response<List<Product>> {
-        return if (success) Response.Success(products) else Response.Error("Error")
+        return if (success) Response.Success(products.toList()) else Response.Error("Error")
     }
 
     override suspend fun addProductToCart(product: Product): Response<Unit> {
@@ -84,5 +84,8 @@ internal class MockedLocalDataSource(
             Response.Success(Unit)
         } else Response.Error("Error")
     }
+
+    fun getProductList(): List<Product> = products.toList()
+    fun getDiscountList(): List<Discount> = discounts.toList()
 
 }

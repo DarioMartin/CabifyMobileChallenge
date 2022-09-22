@@ -21,17 +21,17 @@ internal class DeactivateDiscountUseCaseTest : UseCaseTest() {
 
     @Test
     fun `Test deactivate discount success`() = runTest {
-        val discount = successLocalDataSource.discounts.first()
+        val discount = successLocalDataSource.getDiscountList().first()
         successUseCase.invoke(discount)
-        val updatedDiscount = successLocalDataSource.discounts.first()
+        val updatedDiscount = successLocalDataSource.getDiscountList().first()
         Truth.assertThat(updatedDiscount.active).isFalse()
     }
 
     @Test
     fun `Test deactivate discount error`() = runTest {
-        val discount = errorLocalDataSource.discounts.first()
+        val discount = errorLocalDataSource.getDiscountList().first()
         errorUseCase.invoke(discount)
-        val updatedDiscount = errorLocalDataSource.discounts.first()
+        val updatedDiscount = errorLocalDataSource.getDiscountList().first()
         Truth.assertThat(updatedDiscount.active).isEqualTo(discount.active)
     }
 

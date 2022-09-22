@@ -23,7 +23,7 @@ internal class GetAvailableProductsUseCaseTest : UseCaseTest(){
 
     @Test
     fun `Test get available products success`() = runTest {
-        val products = successServerDataSource.products
+        val products = successServerDataSource.getProductList()
         val response = successUseCase.invoke()
         Truth.assertThat(response.data?.size).isEqualTo(products.size)
     }

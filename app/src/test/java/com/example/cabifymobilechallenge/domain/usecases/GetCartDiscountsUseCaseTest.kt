@@ -23,7 +23,7 @@ internal class GetCartDiscountsUseCaseTest : UseCaseTest() {
 
     @Test
     fun `Test get cart discounts success`() = runTest {
-        val discounts = successLocalDataSource.discounts.toList()
+        val discounts = successLocalDataSource.getDiscountList().toList()
         val response = successUseCase.invoke()
         Truth.assertThat(response.data).isEqualTo(discounts)
     }

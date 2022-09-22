@@ -23,17 +23,17 @@ internal class ClearCartUseCaseTest : UseCaseTest() {
     @Test
     fun `Test clear cart success`() = runTest {
         successUseCase.invoke()
-        Truth.assertThat(successLocalDataSource.products).isEmpty()
-        Truth.assertThat(successLocalDataSource.discounts).isEmpty()
+        Truth.assertThat(successLocalDataSource.getProductList()).isEmpty()
+        Truth.assertThat(successLocalDataSource.getDiscountList()).isEmpty()
     }
 
     @Test
     fun `Test clear cart error`() = runTest {
-        val products = errorLocalDataSource.products.toList()
-        val discounts = errorLocalDataSource.discounts.toList()
+        val products = errorLocalDataSource.getProductList()
+        val discounts = errorLocalDataSource.getDiscountList()
         errorUseCase.invoke()
-        Truth.assertThat(products).isEqualTo(errorLocalDataSource.products)
-        Truth.assertThat(discounts).isEqualTo(errorLocalDataSource.discounts)
+        Truth.assertThat(products).isEqualTo(errorLocalDataSource.getProductList())
+        Truth.assertThat(discounts).isEqualTo(errorLocalDataSource.getDiscountList())
     }
 
 }

@@ -23,7 +23,7 @@ internal class GetAvailableDiscountsUseCaseTest : UseCaseTest() {
     @Test
     fun `Test get discounts success`() = runTest {
         val response = successUseCase.invoke()
-        Truth.assertThat(response.data).isEqualTo(successServerDataSource.discounts)
+        Truth.assertThat(response.data).isEqualTo(successServerDataSource.getDiscountList())
     }
 
     @Test

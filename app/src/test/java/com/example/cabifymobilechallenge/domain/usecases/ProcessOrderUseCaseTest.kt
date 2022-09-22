@@ -24,8 +24,8 @@ internal class ProcessOrderUseCaseTest : UseCaseTest() {
     fun `Test process order success`() = runTest {
         successUseCase.invoke()
 
-        val products = successLocalDataSource.products
-        val discounts = successLocalDataSource.discounts
+        val products = successLocalDataSource.getProductList()
+        val discounts = successLocalDataSource.getProductList()
 
         Truth.assertThat(products).isEmpty()
         Truth.assertThat(discounts).isEmpty()
@@ -35,8 +35,8 @@ internal class ProcessOrderUseCaseTest : UseCaseTest() {
     fun `Test process order error`() = runTest {
         errorUseCase.invoke()
 
-        val products = errorLocalDataSource.products
-        val discounts = errorLocalDataSource.discounts
+        val products = errorLocalDataSource.getProductList()
+        val discounts = errorLocalDataSource.getDiscountList()
 
         Truth.assertThat(products).isNotEmpty()
         Truth.assertThat(discounts).isNotEmpty()

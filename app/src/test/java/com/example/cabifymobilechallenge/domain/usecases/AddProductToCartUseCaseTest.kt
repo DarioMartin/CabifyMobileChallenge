@@ -22,7 +22,7 @@ internal class AddProductToCartUseCaseTest : UseCaseTest() {
 
     @Test
     fun `Test add an item success`() = runTest {
-        val products = successServerDataSource.products
+        val products = successServerDataSource.getProductList()
         val product = products.first()
         val initialCount: Int = successLocalDataSource.getProductCount(product).data ?: 0
         successUseCase.invoke(product)
@@ -32,10 +32,10 @@ internal class AddProductToCartUseCaseTest : UseCaseTest() {
 
     @Test
     fun `Test add an item error`() = runTest {
-        val products = errorServerDataSource.products.toList()
+        val products = errorServerDataSource.getProductList().toList()
         val product = products.first()
         errorUseCase.invoke(product)
-        Truth.assertThat(products).isEqualTo(errorServerDataSource.products)
+        Truth.assertThat(products.size).isEqualTo(errorServerDataSource.getProductList().size)
     }
 
 }

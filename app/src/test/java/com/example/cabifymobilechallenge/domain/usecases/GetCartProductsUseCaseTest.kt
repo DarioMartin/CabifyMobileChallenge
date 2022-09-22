@@ -9,7 +9,7 @@ import org.junit.Test
 
 
 @ExperimentalCoroutinesApi
-internal class GetCartProductsUseCaseTest : UseCaseTest(){
+internal class GetCartProductsUseCaseTest : UseCaseTest() {
 
     private lateinit var successUseCase: GetCartProductsUseCase
     private lateinit var errorUseCase: GetCartProductsUseCase
@@ -23,9 +23,9 @@ internal class GetCartProductsUseCaseTest : UseCaseTest(){
 
     @Test
     fun `Test get cart products success`() = runTest {
-        val products = successLocalDataSource.products.toList()
+        val products = successLocalDataSource.getProductList()
         val response = successUseCase.invoke()
-        Truth.assertThat(response.data).isEqualTo(products)
+        Truth.assertThat(response.data?.size).isEqualTo(products.size)
     }
 
     @Test
