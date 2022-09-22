@@ -2,7 +2,6 @@ package com.example.cabifymobilechallenge.domain.usecases
 
 import com.example.cabifymobilechallenge.data.local.MockedLocalDataSource
 import com.example.cabifymobilechallenge.data.remote.MockedServerDataSource
-import com.example.cabifymobilechallenge.data.repository.IRemoteDataSource
 import com.example.cabifymobilechallenge.data.repository.StoreRepositoryImpl
 import com.example.cabifymobilechallenge.domain.repository.IStoreRepository
 

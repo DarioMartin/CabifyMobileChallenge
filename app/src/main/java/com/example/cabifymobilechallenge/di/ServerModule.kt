@@ -1,16 +1,12 @@
 package com.example.cabifymobilechallenge.di
 
-import android.content.Context
-import androidx.room.Room
 import com.example.cabifymobilechallenge.BuildConfig
-import com.example.cabifymobilechallenge.data.local.StoreDatabase
 import com.example.cabifymobilechallenge.data.remote.ServerDataSource
 import com.example.cabifymobilechallenge.data.remote.StoreApi
 import com.example.cabifymobilechallenge.data.repository.IRemoteDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

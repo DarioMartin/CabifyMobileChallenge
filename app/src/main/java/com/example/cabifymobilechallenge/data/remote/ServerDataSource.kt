@@ -5,7 +5,6 @@ import com.example.cabifymobilechallenge.data.repository.IRemoteDataSource
 import com.example.cabifymobilechallenge.domain.model.Discount
 import com.example.cabifymobilechallenge.domain.model.Product
 import com.example.cabifymobilechallenge.domain.model.ShoppingCart
-import java.lang.Exception
 
 class ServerDataSource(private val storeApi: StoreApi) : IRemoteDataSource {
 

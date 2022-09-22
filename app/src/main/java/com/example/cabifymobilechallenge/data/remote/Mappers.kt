@@ -1,6 +1,5 @@
 package com.example.cabifymobilechallenge.data.remote
 
-import com.example.cabifymobilechallenge.data.remote.RemoteProduct
 import com.example.cabifymobilechallenge.domain.model.Product
 
 fun RemoteProduct.toDomainProduct(): Product {

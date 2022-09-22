@@ -2,8 +2,6 @@ package com.example.cabifymobilechallenge.data.local.dao
 
 import androidx.room.*
 import com.example.cabifymobilechallenge.data.local.entity.DiscountEntity
-import com.example.cabifymobilechallenge.data.local.entity.ProductEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DiscountDao {
