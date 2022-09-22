@@ -1,3 +1,30 @@
 <resources>
-    <string name="app_name">CabifyMobileChallenge</string>
+    <string name="app_name" translatable="false">Cabify Store</string>
+    <string name="empty_cart_message">Empty cart, there are no items in your cart yet.</string>
+    <string name="no_discounts_available">No discounts available</string>
+    <string name="two_x_one_voucher_promo">2 Per 1 Voucher Promo</string>
+    <string name="t_shirt_bulk_promo">T-Shirt bulk Promo</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="discount">Discount</string>
+    <string name="place_order">Place order</string>
+    <string name="total">Total</string>
+    <string name="available_discounts">Available discounts</string>
+    <string name="cd_add_item">Add item</string>
+    <string name="cd_delete_item">Delete item</string>
+    <string name="proceed_to_checkout">Proceed to checkout</string>
+    <string name="product_list_error_title">There was a problem</string>
+    <string name="product_list_error_body">We couldn\'t get any products, please try again later.</string>
+    <string name="product_empty_list_title">Empty list</string>
+    <string name="product_empty_list_body">No products found, please try again later.</string>
+    <string name="error_updating_quantity">Couldn\'t perform the action</string>
+    <string name="error_updating_discounts">Couldn\'t perform the action</string>
+    <string name="error_get_discounts">We couldn\'t load the discounts, please try again later.</string>
+    <string name="error_get_products">We couldn\'t load the products, please try again later.</string>
+    <string name="order_error_title">Order not placed</string>
+    <string name="order_error_body">Your order could not be completed</string>
+    <string name="try_again">Try again</string>
+    <string name="order_success_title">Order completed</string>
+    <string name="order_success_body">Your order has been completed successfully</string>
+    <string name="buy_again">Buy again</string>
+    <string name="clear_cart">Clear Cart</string>
 </resources>
