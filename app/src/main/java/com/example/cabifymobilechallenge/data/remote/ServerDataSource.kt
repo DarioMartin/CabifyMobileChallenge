@@ -10,10 +10,14 @@ class ServerDataSource(private val storeApi: StoreApi) : IRemoteDataSource {
 
     override suspend fun getProducts(): Response<List<Product>> {
         return try {
-            val serverProducts = storeApi.getStocks()
-            val products =
-                serverProducts.body()?.products?.map { it.toDomainProduct() } ?: emptyList()
-            Response.Success(data = products)
+            val response = storeApi.getStocks()
+            if (response.isSuccessful) {
+                val products = response.body()?.products
+                    ?.map { it.toDomainProduct() } ?: emptyList()
+                Response.Success(data = products)
+            } else {
+                Response.Error("Could not load the stocks")
+            }
         } catch (e: Exception) {
             Response.Error(e.message ?: "Could not load the stocks")
         }
